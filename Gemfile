@@ -73,3 +73,12 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem 'ollama-ai', '~> 1.3.0'
+
+gem "ostruct"
+
+gem "ruby_llm", "~> 1.6.4"
+
+gem "hotwire-livereload", "~> 2.1", group: :development
+
