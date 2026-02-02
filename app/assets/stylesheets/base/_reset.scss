@@ -1,0 +1,59 @@
+// Base resets and global styles
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  background-color: $slate-900;
+  color: $slate-200;
+  overflow-x: hidden;
+}
+
+// Better focus styles
+:focus-visible {
+  outline: 2px solid $teal-400;
+  outline-offset: 2px;
+}
+
+// Selection color
+::selection {
+  background-color: rgba($teal-400, 0.3);
+  color: $slate-100;
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba($slate-700, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba($slate-500, 0.5);
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba($slate-400, 0.6);
+  }
+}
+
+// Firefox scrollbar
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba($slate-500, 0.5) rgba($slate-700, 0.3);
+}

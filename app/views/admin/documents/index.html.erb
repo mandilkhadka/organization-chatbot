@@ -1,0 +1,45 @@
+<div class="container py-4">
+  <div class="admin-header">
+    <h1>
+      <i class="fas fa-folder-open"></i>
+      Document Management
+    </h1>
+    <%= link_to new_admin_document_path, class: "btn btn-primary" do %>
+      <i class="fas fa-upload me-2"></i>Upload Document
+    <% end %>
+  </div>
+
+  <% if @documents.empty? %>
+    <div class="card">
+      <div class="card-body">
+        <div class="admin-empty-state">
+          <div class="empty-icon">
+            <i class="fas fa-folder-open"></i>
+          </div>
+          <p>No documents uploaded yet.</p>
+          <%= link_to new_admin_document_path, class: "btn btn-outline-primary" do %>
+            <i class="fas fa-upload me-2"></i>Upload your first document
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="table-container">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Filename</th>
+            <th>Status</th>
+            <th>Chunks</th>
+            <th>Uploaded</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="documents">
+          <%= render @documents %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

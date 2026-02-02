@@ -3,4 +3,13 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  enum role: { employee: 0, admin: 1 }
+
+  has_many :documents, dependent: :destroy
+  has_many :conversations, dependent: :destroy
+
+  def admin?
+    role == "admin"
+  end
 end

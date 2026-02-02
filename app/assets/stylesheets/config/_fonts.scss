@@ -1,16 +1,17 @@
-// Import Google fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito:400,700|Work+Sans:400,700&display=swap');
+// Import distinctive fonts - Geist for body, Sora for headings
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap");
+
+// Geist font (Vercel's typeface) via Fontsource CDN
+@import url("https://cdn.jsdelivr.net/npm/geist@1.2.2/dist/fonts/geist-sans/style.min.css");
+@import url("https://cdn.jsdelivr.net/npm/geist@1.2.2/dist/fonts/geist-mono/style.min.css");
 
 // Define fonts for body and headers
-$body-font: "Work Sans", "Helvetica", "sans-serif";
-$headers-font: "Nunito", "Helvetica", "sans-serif";
-
-// To use a font file (.woff) uncomment following lines
-// @font-face {
-//   font-family: "Font Name";
-//   src: font-url('FontFile.eot');
-//   src: font-url('FontFile.eot?#iefix') format('embedded-opentype'),
-//        font-url('FontFile.woff') format('woff'),
-//        font-url('FontFile.ttf') format('truetype')
-// }
-// $my-font: "Font Name";
+$body-font:
+  "Geist Sans",
+  "Inter",
+  "SF Pro Display",
+  -apple-system,
+  BlinkMacSystemFont,
+  sans-serif;
+$headers-font: "Sora", "Geist Sans", sans-serif;
+$mono-font: "Geist Mono", "SF Mono", "Fira Code", monospace;

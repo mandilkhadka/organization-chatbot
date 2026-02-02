@@ -1,0 +1,53 @@
+<% streaming_content ||= nil %>
+
+<div id="message_<%= message.id %>" class="message <%= message.user? ? 'message-user' : 'message-assistant' %> animate-fade-in-up">
+  <div class="message-avatar">
+    <i class="fas <%= message.user? ? 'fa-user' : 'fa-robot' %>"></i>
+  </div>
+
+  <div class="message-bubble">
+    <div class="message-content">
+      <%= simple_format(streaming_content || message.content) %>
+    </div>
+
+    <% if message.assistant? && message.message_sources.any? %>
+      <div class="message-sources">
+        <div class="sources-label">
+          <i class="fas fa-file-alt"></i>
+          <span>Sources</span>
+        </div>
+        <div class="sources-list">
+          <% message.message_sources.includes(document_chunk: :document).each do |source| %>
+            <span class="badge-source">
+              <i class="fas fa-file"></i>
+              <%= source.document_chunk.document.title %>
+            </span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if message.assistant? && message.content.present? && streaming_content.nil? %>
+      <div class="message-feedback" data-controller="feedback">
+        <button
+          class="feedback-btn <%= message.feedback == 'positive' ? 'active' : '' %>"
+          data-message-id="<%= message.id %>"
+          data-feedback="positive"
+          data-action="click->feedback#submit"
+          title="Helpful"
+        >
+          <i class="fas fa-thumbs-up"></i>
+        </button>
+        <button
+          class="feedback-btn <%= message.feedback == 'negative' ? 'active' : '' %>"
+          data-message-id="<%= message.id %>"
+          data-feedback="negative"
+          data-action="click->feedback#submit"
+          title="Not helpful"
+        >
+          <i class="fas fa-thumbs-down"></i>
+        </button>
+      </div>
+    <% end %>
+  </div>
+</div>

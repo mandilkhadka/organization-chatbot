@@ -1,28 +1,106 @@
-// This is where you override default Bootstrap variables
-// 1. Find all Bootstrap variables that you can override at the end of each component's documentation under the `Sass variables` anchor
-// e.g. here are the ones you can override for the navbar https://getbootstrap.com/docs/5.3/components/navbar/#sass-variables
-// 2. These variables are defined with default value (see https://robots.thoughtbot.com/sass-default)
-// 3. You can override them below!
+// Bootstrap 5 variable overrides for dark theme
+// Modern slate + teal aesthetic
 
-// General style
+// Typography
 $font-family-sans-serif: $body-font;
-$headings-font-family:   $headers-font;
-$body-bg:                $light-gray;
-$font-size-base:         1rem;
+$headings-font-family: $headers-font;
+$font-family-monospace: $mono-font;
+$font-size-base: 0.9375rem; // 15px - slightly smaller, more refined
+$line-height-base: 1.6;
+$headings-font-weight: 600;
+$headings-line-height: 1.3;
 
-// Colors
-$body-color: $gray;
-$primary:    $blue;
-$success:    $green;
-$info:       $yellow;
-$danger:     $red;
-$warning:    $orange;
+// Dark theme colors
+$body-bg: $slate-900;
+$body-color: $slate-200;
+$primary: $teal-500;
+$secondary: $slate-600;
+$success: $emerald-400;
+$info: $cyan-400;
+$warning: $amber-400;
+$danger: $rose-500;
+$light: $slate-700;
+$dark: $slate-900;
 
-// Buttons & inputs' radius
-$border-radius-sm:            .0625rem;
-$border-radius:               .125rem;
-$border-radius-lg:            .25rem;
-$border-radius-xl:            .5rem;
-$border-radius-xxl:           1rem;
+// Links
+$link-color: $teal-400;
+$link-hover-color: $teal-300;
+$link-decoration: none;
 
-// Override other variables below!
+// Cards
+$card-bg: rgba($slate-800, 0.6);
+$card-border-color: $border-subtle;
+$card-cap-bg: rgba($slate-700, 0.4);
+
+// Buttons
+$btn-border-radius: 0.5rem;
+$btn-border-radius-sm: 0.375rem;
+$btn-border-radius-lg: 0.625rem;
+$btn-padding-y: 0.625rem;
+$btn-padding-x: 1.25rem;
+$btn-font-weight: 500;
+$btn-focus-box-shadow: 0 0 0 3px rgba($teal-400, 0.25);
+
+// Forms
+$input-bg: rgba($slate-800, 0.8);
+$input-border-color: $border-default;
+$input-color: $slate-100;
+$input-placeholder-color: $slate-500;
+$input-focus-border-color: $teal-500;
+$input-focus-box-shadow: 0 0 0 3px rgba($teal-400, 0.15);
+$input-border-radius: 0.5rem;
+$input-border-radius-lg: 0.625rem;
+$input-padding-y: 0.75rem;
+$input-padding-x: 1rem;
+
+// Dropdowns
+$dropdown-bg: rgba($slate-800, 0.95);
+$dropdown-border-color: $border-default;
+$dropdown-link-color: $slate-200;
+$dropdown-link-hover-bg: rgba($slate-700, 0.6);
+$dropdown-link-hover-color: $slate-100;
+$dropdown-divider-bg: $border-subtle;
+
+// Navbar
+$navbar-dark-color: $slate-300;
+$navbar-dark-hover-color: $slate-100;
+$navbar-dark-active-color: $teal-400;
+
+// Tables
+$table-bg: transparent;
+$table-color: $slate-200;
+$table-border-color: $border-subtle;
+$table-striped-bg: rgba($slate-700, 0.2);
+$table-hover-bg: rgba($slate-700, 0.4);
+
+// Badges
+$badge-font-weight: 500;
+$badge-padding-y: 0.35em;
+$badge-padding-x: 0.65em;
+$badge-border-radius: 0.375rem;
+
+// Modals
+$modal-content-bg: $slate-800;
+$modal-content-border-color: $border-default;
+$modal-header-border-color: $border-subtle;
+
+// Border radius system - more rounded, modern feel
+$border-radius: 0.5rem;
+$border-radius-sm: 0.375rem;
+$border-radius-lg: 0.75rem;
+$border-radius-xl: 1rem;
+$border-radius-xxl: 1.5rem;
+$border-radius-pill: 50rem;
+
+// Shadows
+$box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+$box-shadow:
+  0 4px 6px -1px rgba(0, 0, 0, 0.3),
+  0 2px 4px -1px rgba(0, 0, 0, 0.2);
+$box-shadow-lg:
+  0 10px 15px -3px rgba(0, 0, 0, 0.4),
+  0 4px 6px -2px rgba(0, 0, 0, 0.3);
+
+// Transitions
+$transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-fade: opacity 0.15s linear;

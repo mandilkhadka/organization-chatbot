@@ -1,35 +1,67 @@
-<nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
-  <div class="container-fluid">
-    <%= link_to "#", class: "navbar-brand" do %>
-      <%= image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png" %>
+<nav class="navbar navbar-expand-lg navbar-main">
+  <div class="container-fluid px-4">
+    <%= link_to root_path, class: "navbar-brand" do %>
+      <div class="brand-icon">
+        <i class="fas fa-robot"></i>
+      </div>
+      <span>Knowledge Assistant</span>
     <% end %>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <% if user_signed_in? %>
-          <li class="nav-item active">
-            <%= link_to "Home", "#", class: "nav-link" %>
-          </li>
           <li class="nav-item">
-            <%= link_to "Messages", "#", class: "nav-link" %>
+            <%= link_to conversations_path, class: "nav-link #{controller_name == 'conversations' ? 'active' : ''}" do %>
+              <i class="fas fa-comments"></i>
+              <span>Chat</span>
+            <% end %>
           </li>
+          <% if current_user.admin? %>
+            <li class="nav-item">
+              <%= link_to admin_documents_path, class: "nav-link #{controller_name == 'documents' ? 'active' : ''}" do %>
+                <i class="fas fa-folder-open"></i>
+                <span>Documents</span>
+              <% end %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+
+      <ul class="navbar-nav">
+        <% if user_signed_in? %>
           <li class="nav-item dropdown">
-          <a href="#" class="avatar" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar", alt: "dropdown menu" %>
-          </a>
+            <a href="#" class="nav-link dropdown-toggle user-menu" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-user-circle"></i>
+              <span class="user-email d-none d-md-inline"><%= current_user.email.split('@').first %></span>
+              <% if current_user.admin? %>
+                <span class="badge badge-admin">Admin</span>
+              <% end %>
+            </a>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <%= link_to "Action", "#", class: "dropdown-item" %>
-              <%= link_to "Another action", "#", class: "dropdown-item" %>
-              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
+              <div class="dropdown-item-text text-muted small px-3 py-2">
+                <%= current_user.email %>
+              </div>
+              <hr class="dropdown-divider my-1">
+              <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item" do %>
+                <i class="fas fa-sign-out-alt me-2"></i>Sign out
+              <% end %>
             </div>
           </li>
         <% else %>
           <li class="nav-item">
-            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+            <%= link_to new_user_session_path, class: "nav-link" do %>
+              <i class="fas fa-sign-in-alt"></i>
+              <span>Sign in</span>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to new_user_registration_path, class: "btn btn-primary btn-sm ms-2" do %>
+              Get Started
+            <% end %>
           </li>
         <% end %>
       </ul>

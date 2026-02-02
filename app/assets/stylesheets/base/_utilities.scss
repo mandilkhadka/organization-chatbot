@@ -1,0 +1,99 @@
+// Custom utility classes
+
+// Text utilities
+.text-gradient {
+  background: linear-gradient(135deg, $teal-400, $cyan-400);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-subtle {
+  background: linear-gradient(135deg, $slate-100, $slate-300);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Glow effects
+.glow-teal {
+  box-shadow:
+    0 0 20px rgba($teal-400, 0.3),
+    0 0 40px rgba($teal-400, 0.1);
+}
+
+.glow-teal-sm {
+  box-shadow: 0 0 10px rgba($teal-400, 0.2);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba($teal-400, 0.5);
+}
+
+// Glass morphism
+.glass {
+  background: rgba($slate-800, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid $border-subtle;
+}
+
+.glass-dark {
+  background: rgba($slate-900, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid $border-subtle;
+}
+
+.glass-light {
+  background: rgba($slate-700, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid $border-subtle;
+}
+
+// Surface styles
+.surface {
+  background: $bg-surface;
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-lg;
+}
+
+.surface-elevated {
+  background: $bg-elevated;
+  border: 1px solid $border-default;
+  border-radius: $border-radius-lg;
+  box-shadow: $box-shadow;
+}
+
+// Interactive states
+.hover-lift {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $box-shadow-lg;
+  }
+}
+
+.hover-glow {
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 0 20px rgba($teal-400, 0.2);
+  }
+}
+
+// Border highlight on hover
+.hover-border-glow {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: $border-highlight;
+    box-shadow: 0 0 0 1px $border-highlight;
+  }
+}

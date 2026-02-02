@@ -1,0 +1,184 @@
+// Admin pages styles
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h1 {
+    font-family: $headers-font;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $slate-100;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+
+    i {
+      color: $teal-400;
+    }
+  }
+}
+
+// Table styles
+.table-container {
+  background: rgba($slate-800, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-xl;
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+  color: $slate-200;
+
+  thead {
+    background: rgba($slate-700, 0.4);
+
+    th {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: $slate-400;
+      border-bottom: 1px solid $border-subtle;
+      padding: 1rem 1.25rem;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background 0.15s ease;
+
+      &:hover {
+        background: rgba($slate-700, 0.3);
+      }
+
+      &:not(:last-child) td {
+        border-bottom: 1px solid $border-subtle;
+      }
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      vertical-align: middle;
+      border: none;
+    }
+  }
+}
+
+// Document title in table
+.document-title {
+  font-weight: 500;
+  color: $slate-100;
+}
+
+.document-filename {
+  font-size: 0.8125rem;
+  color: $slate-500;
+  font-family: $mono-font;
+}
+
+.document-meta {
+  font-size: 0.8125rem;
+  color: $slate-400;
+}
+
+// Empty state for admin
+.admin-empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: $slate-400;
+
+  .empty-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba($slate-700, 0.4);
+    border: 1px solid $border-subtle;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem;
+    color: $slate-500;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Upload form
+.upload-form {
+  background: rgba($slate-800, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-xl;
+  padding: 2rem;
+  max-width: 600px;
+
+  .form-label {
+    font-weight: 500;
+    color: $slate-200;
+  }
+
+  .file-upload-area {
+    border: 2px dashed $border-default;
+    border-radius: $border-radius-lg;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $teal-500;
+      background: rgba($teal-500, 0.05);
+    }
+
+    &.dragover {
+      border-color: $teal-400;
+      background: rgba($teal-400, 0.1);
+    }
+
+    .upload-icon {
+      font-size: 2.5rem;
+      color: $slate-500;
+      margin-bottom: 1rem;
+    }
+
+    .upload-text {
+      color: $slate-300;
+      font-size: 0.9375rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-hint {
+      color: $slate-500;
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+// Action buttons in table
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+}

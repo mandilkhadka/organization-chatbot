@@ -1,0 +1,33 @@
+<tr id="<%= dom_id(document) %>">
+  <td>
+    <span class="document-title"><%= document.title %></span>
+  </td>
+  <td>
+    <span class="document-filename"><%= document.filename %></span>
+  </td>
+  <td>
+    <% case document.status %>
+    <% when "pending" %>
+      <span class="badge-status-pending">Pending</span>
+    <% when "processing" %>
+      <span class="badge-status-processing">Processing</span>
+    <% when "ready" %>
+      <span class="badge-status-completed">Ready</span>
+    <% when "failed" %>
+      <span class="badge-status-failed" title="<%= document.error_message %>">Failed</span>
+    <% end %>
+  </td>
+  <td>
+    <span class="document-meta"><%= document.document_chunks.count %></span>
+  </td>
+  <td>
+    <span class="document-meta"><%= time_ago_in_words(document.created_at) %> ago</span>
+  </td>
+  <td>
+    <div class="table-actions">
+      <%= button_to admin_document_path(document), method: :delete, class: "btn btn-ghost btn-icon", data: { turbo_confirm: "Are you sure you want to delete this document?" } do %>
+        <i class="fas fa-trash text-danger"></i>
+      <% end %>
+    </div>
+  </td>
+</tr>

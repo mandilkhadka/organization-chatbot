@@ -1,10 +1,64 @@
-// Define variables for your color scheme
+// Modern Slate + Teal color palette
+// Inspired by Linear, Vercel, and premium SaaS aesthetics
 
-// For example:
-$red: #FD1015;
-$blue: #0D6EFD;
-$yellow: #FFC65A;
-$orange: #E67E22;
-$green: #1EDD88;
-$gray: #0E0000;
-$light-gray: #F4F4F4;
+// Core palette
+$slate-950: #020617;
+$slate-900: #0f172a;
+$slate-800: #1e293b;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-500: #64748b;
+$slate-400: #94a3b8;
+$slate-300: #cbd5e1;
+$slate-200: #e2e8f0;
+$slate-100: #f1f5f9;
+$slate-50: #f8fafc;
+
+// Accent colors - Vibrant teal
+$teal-500: #14b8a6;
+$teal-400: #2dd4bf;
+$teal-300: #5eead4;
+$teal-600: #0d9488;
+
+// Supporting accents
+$cyan-400: #22d3ee;
+$emerald-400: #34d399;
+$violet-500: #8b5cf6;
+$rose-500: #f43f5e;
+$amber-400: #fbbf24;
+
+// Semantic colors
+$primary: $teal-500;
+$primary-light: $teal-400;
+$primary-glow: rgba($teal-400, 0.4);
+
+$success: $emerald-400;
+$warning: $amber-400;
+$danger: $rose-500;
+$info: $cyan-400;
+
+// Background system
+$bg-base: $slate-900;
+$bg-elevated: $slate-800;
+$bg-surface: rgba($slate-800, 0.6);
+$bg-card: rgba($slate-700, 0.3);
+
+// Text colors
+$text-primary: $slate-100;
+$text-secondary: $slate-400;
+$text-muted: $slate-500;
+$text-inverse: $slate-900;
+
+// Border colors
+$border-default: rgba($slate-500, 0.2);
+$border-subtle: rgba($slate-600, 0.15);
+$border-highlight: rgba($teal-400, 0.3);
+
+// Legacy variable mappings for Bootstrap
+$red: $rose-500;
+$blue: $teal-500;
+$yellow: $amber-400;
+$orange: #f97316;
+$green: $emerald-400;
+$gray: $slate-400;
+$light-gray: $slate-800;

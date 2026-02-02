@@ -1,0 +1,160 @@
+// Modern button styles
+
+.btn {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  i {
+    font-size: 0.9em;
+  }
+}
+
+// Primary button - Teal gradient
+.btn-primary {
+  background: linear-gradient(135deg, $teal-500, $teal-600);
+  border-color: $teal-500;
+  color: white;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba($teal-400, 0.1);
+
+  &:hover,
+  &:focus {
+    background: linear-gradient(135deg, $teal-400, $teal-500);
+    border-color: $teal-400;
+    color: white;
+    box-shadow:
+      0 4px 12px rgba($teal-500, 0.3),
+      0 0 0 1px rgba($teal-400, 0.2);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  &:disabled {
+    background: $slate-600;
+    border-color: $slate-600;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+// Outline primary
+.btn-outline-primary {
+  background: transparent;
+  border-color: $teal-500;
+  color: $teal-400;
+
+  &:hover,
+  &:focus {
+    background: rgba($teal-500, 0.1);
+    border-color: $teal-400;
+    color: $teal-300;
+    box-shadow: 0 0 0 3px rgba($teal-500, 0.15);
+  }
+}
+
+// Secondary button - Subtle
+.btn-secondary {
+  background: rgba($slate-700, 0.5);
+  border-color: $border-default;
+  color: $slate-200;
+
+  &:hover,
+  &:focus {
+    background: rgba($slate-600, 0.6);
+    border-color: $border-highlight;
+    color: $slate-100;
+  }
+}
+
+// Outline secondary
+.btn-outline-secondary {
+  background: transparent;
+  border-color: $border-default;
+  color: $slate-400;
+
+  &:hover,
+  &:focus {
+    background: rgba($slate-700, 0.4);
+    border-color: $slate-500;
+    color: $slate-200;
+  }
+}
+
+// Ghost button - minimal
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: $slate-400;
+
+  &:hover,
+  &:focus {
+    background: rgba($slate-700, 0.5);
+    color: $slate-200;
+  }
+}
+
+// Success
+.btn-success {
+  background: linear-gradient(135deg, $emerald-400, darken($emerald-400, 10%));
+  border-color: $emerald-400;
+  color: $slate-900;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 4px 12px rgba($emerald-400, 0.3);
+    transform: translateY(-1px);
+  }
+}
+
+// Danger
+.btn-danger {
+  background: linear-gradient(135deg, $rose-500, darken($rose-500, 10%));
+  border-color: $rose-500;
+  color: white;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 4px 12px rgba($rose-500, 0.3);
+    transform: translateY(-1px);
+  }
+}
+
+// Size variants
+.btn-sm {
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-lg {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+// Icon button
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: $border-radius;
+
+  &.btn-sm {
+    width: 28px;
+    height: 28px;
+  }
+
+  &.btn-lg {
+    width: 44px;
+    height: 44px;
+  }
+}

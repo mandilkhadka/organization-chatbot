@@ -1,0 +1,144 @@
+// Modern card styles
+
+.card {
+  background: rgba($slate-800, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    border-color: $border-highlight;
+  }
+
+  .card-header {
+    background: rgba($slate-700, 0.4);
+    border-bottom: 1px solid $border-subtle;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    color: $slate-100;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-footer {
+    background: rgba($slate-700, 0.3);
+    border-top: 1px solid $border-subtle;
+    padding: 1rem 1.25rem;
+  }
+
+  .card-title {
+    color: $slate-100;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-text {
+    color: $slate-400;
+    font-size: 0.9375rem;
+  }
+}
+
+// Feature card - for landing page
+.feature-card {
+  background: rgba($slate-800, 0.4);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-xl;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, $teal-400, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    background: rgba($slate-800, 0.6);
+    border-color: $border-highlight;
+    transform: translateY(-4px);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      transform: scale(1.1);
+      box-shadow: 0 8px 24px rgba($teal-400, 0.3);
+    }
+  }
+
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(
+      135deg,
+      rgba($teal-500, 0.2),
+      rgba($cyan-400, 0.1)
+    );
+    border: 1px solid rgba($teal-400, 0.3);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-size: 1.5rem;
+    color: $teal-400;
+    transition: all 0.3s ease;
+  }
+
+  .feature-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $slate-100;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-description {
+    font-size: 0.875rem;
+    color: $slate-400;
+    line-height: 1.6;
+  }
+}
+
+// Stats card
+.stats-card {
+  background: rgba($slate-800, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-lg;
+  padding: 1.5rem;
+
+  .stats-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $slate-100;
+    line-height: 1.2;
+
+    &.text-gradient {
+      background: linear-gradient(135deg, $teal-400, $cyan-400);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .stats-label {
+    font-size: 0.875rem;
+    color: $slate-400;
+    margin-top: 0.25rem;
+  }
+}

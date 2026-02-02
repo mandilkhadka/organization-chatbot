@@ -1,0 +1,5 @@
+<%= link_to conversation_path(conversation), id: dom_id(conversation), class: "conversation-item #{active ? 'active' : ''}" do %>
+  <i class="fas fa-comment conversation-icon"></i>
+  <span class="conversation-title"><%= conversation.title.truncate(30) %></span>
+  <span class="conversation-time"><%= time_ago_in_words(conversation.updated_at) %></span>
+<% end %>

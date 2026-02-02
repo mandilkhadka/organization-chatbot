@@ -1,2 +1,73 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<section class="hero-section">
+  <div class="hero-content">
+    <div class="brand-icon-large animate-fade-in-up">
+      <i class="fas fa-robot"></i>
+    </div>
+
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span>AI-Powered Knowledge Base</span>
+    </div>
+
+    <h1 class="hero-title">
+      Your Organization's<br>
+      <span class="text-gradient">Knowledge Assistant</span>
+    </h1>
+
+    <p class="hero-description">
+      Get instant, accurate answers to questions about company policies, procedures, and documentation.
+      Powered by AI with source citations you can trust.
+    </p>
+
+    <div class="hero-actions">
+      <% if user_signed_in? %>
+        <%= link_to conversations_path, class: "btn btn-primary btn-lg" do %>
+          <i class="fas fa-comments me-2"></i>Start Chatting
+        <% end %>
+      <% else %>
+        <%= link_to new_user_session_path, class: "btn btn-primary btn-lg" do %>
+          <i class="fas fa-sign-in-alt me-2"></i>Sign In
+        <% end %>
+        <%= link_to new_user_registration_path, class: "btn btn-outline-primary btn-lg" do %>
+          <i class="fas fa-user-plus me-2"></i>Create Account
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="container">
+    <div class="features-grid">
+      <div class="feature-card animate-fade-in-up animate-delay-1">
+        <div class="feature-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3 class="feature-title">Instant Answers</h3>
+        <p class="feature-description">
+          Get immediate responses to your questions, available 24/7. No more searching through documents.
+        </p>
+      </div>
+
+      <div class="feature-card animate-fade-in-up animate-delay-2">
+        <div class="feature-icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <h3 class="feature-title">Source Citations</h3>
+        <p class="feature-description">
+          Every answer includes references to original documents, so you can verify and explore further.
+        </p>
+      </div>
+
+      <div class="feature-card animate-fade-in-up animate-delay-3">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3 class="feature-title">Secure & Private</h3>
+        <p class="feature-description">
+          Your organization's data stays secure. All conversations and documents are protected.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
