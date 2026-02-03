@@ -1,5 +1,33 @@
 // Chat page styles
 
+// Focus visible styles for accessibility
+.new-chat-btn,
+.conversation-item,
+.feedback-btn,
+.btn-send,
+.form-control {
+  &:focus-visible {
+    outline: 2px solid $teal-400;
+    outline-offset: 2px;
+  }
+}
+
+// Reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .messages-container {
+    scroll-behavior: auto;
+  }
+}
+
 .chat-container {
   display: flex;
   height: calc(100vh - 60px);
@@ -308,16 +336,13 @@
 .typing-indicator {
   display: flex;
   gap: 0.375rem;
-  padding: 0.75rem 1rem;
-  background: rgba($slate-800, 0.6);
-  border: 1px solid $border-subtle;
-  border-radius: $border-radius-lg;
-  width: fit-content;
+  align-items: center;
+  padding: 0.25rem 0;
 
-  .dot {
+  span {
     width: 8px;
     height: 8px;
-    background: $slate-400;
+    background: $teal-400;
     border-radius: 50%;
     animation: typingDot 1.4s ease-in-out infinite;
 
@@ -327,6 +352,83 @@
     &:nth-child(3) {
       animation-delay: 0.4s;
     }
+  }
+}
+
+@keyframes typingDot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+// Streaming cursor
+.cursor-blink {
+  animation: cursorBlink 1s step-end infinite;
+  color: $teal-400;
+  font-weight: normal;
+}
+
+@keyframes cursorBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+// Streaming message state
+.message.streaming {
+  .message-bubble {
+    animation: streamingPulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes streamingPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba($teal-400, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba($teal-400, 0.1);
+  }
+}
+
+// Error state
+.message-error {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: $danger;
+  font-size: 0.8125rem;
+
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+// Fade in animation for sources and feedback
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

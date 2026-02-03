@@ -21,9 +21,11 @@ default: &default
 
 development:
   <<: *default
-  # Use DATABASE_URL for Supabase connection, or fallback to local database
-  url: <%= ENV.fetch("DATABASE_URL", nil) %>
-  database: <%= ENV["DATABASE_URL"].blank? ? "organization_chatbot_development" : nil %>
+  # Use local PostgreSQL database for development
+  database: organization_chatbot_development
+  host: localhost
+  username: <%= ENV["DATABASE_USER"] || `whoami`.strip %>
+  # password: <%= ENV["DATABASE_PASSWORD"] %> # uncomment if you need a password
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -55,3 +57,4 @@ test:
 production:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i %>

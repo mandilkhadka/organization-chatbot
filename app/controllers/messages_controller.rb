@@ -3,29 +3,32 @@ class MessagesController < ApplicationController
   before_action :set_conversation
 
   def create
+    # Validate content
+    content = message_params[:content]&.strip
+    if content.blank?
+      head :unprocessable_entity
+      return
+    end
+
     # Create user message
     @user_message = @conversation.messages.create!(
       role: :user,
-      content: message_params[:content]
+      content: content,
+      status: :complete
     )
 
     # Update conversation title if it's the first message
-    @conversation.update(title: message_params[:content].truncate(50)) if @conversation.messages.one?
+    @conversation.update(title: content.truncate(50)) if @conversation.messages.user.one?
 
-    # Generate AI response synchronously for simplicity
-    # In production, this could be moved to a background job with streaming
-    rag_service = RAGService.new
-    result = rag_service.query(message_params[:content])
-
+    # Create placeholder assistant message for streaming
     @assistant_message = @conversation.messages.create!(
       role: :assistant,
-      content: result[:response]
+      content: "",
+      status: :pending
     )
 
-    # Save message sources (citations)
-    result[:sources].each do |chunk|
-      @assistant_message.message_sources.create!(document_chunk: chunk, relevance_score: chunk.relevance_score)
-    end
+    # Queue background job for async response generation with streaming
+    GenerateResponseJob.perform_later(@assistant_message.id, content)
 
     respond_to do |format|
       format.turbo_stream
@@ -35,8 +38,14 @@ class MessagesController < ApplicationController
 
   def feedback
     @message = @conversation.messages.find(params[:id])
-    @message.update!(feedback: params[:feedback])
+    feedback_value = params[:feedback]
 
+    unless Message.feedbacks.keys.include?(feedback_value)
+      head :bad_request
+      return
+    end
+
+    @message.update!(feedback: feedback_value)
     head :ok
   end
 

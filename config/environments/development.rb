@@ -13,7 +13,7 @@ Rails.application.configure do
   config.eager_load = false
 
   # Show full error reports (set to false to hide sensitive info like DB hostnames)
-  config.consider_all_requests_local = ENV.fetch("SHOW_DETAILED_ERRORS", "false") == "true"
+  config.consider_all_requests_local = true
 
   # Enable server timing
   config.server_timing = true

@@ -92,3 +92,4 @@ gem "pdf-reader"           # PDF parsing
 gem "docx"                 # DOCX parsing
 gem "neighbor"             # pgvector ActiveRecord integration
 gem "sidekiq"              # Background jobs
+gem "rack-attack"          # Rate limiting and throttling

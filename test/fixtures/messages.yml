@@ -1,0 +1,43 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+user_message:
+  conversation: employee_conversation
+  role: 0 # user
+  content: "What is the company policy on vacation?"
+  feedback: 0 # none
+  status: 2 # complete
+
+assistant_message:
+  conversation: employee_conversation
+  role: 1 # assistant
+  content: "The company vacation policy allows 15 days per year."
+  feedback: 0 # none
+  status: 2 # complete
+
+pending_assistant_message:
+  conversation: employee_conversation
+  role: 1 # assistant
+  content: ""
+  feedback: 0 # none
+  status: 0 # pending
+
+streaming_assistant_message:
+  conversation: employee_conversation
+  role: 1 # assistant
+  content: "Partial response..."
+  feedback: 0 # none
+  status: 1 # streaming
+
+failed_assistant_message:
+  conversation: employee_conversation
+  role: 1 # assistant
+  content: "I'm sorry, I encountered an error."
+  feedback: 0 # none
+  status: 3 # failed
+
+other_user_message:
+  conversation: other_user_conversation
+  role: 0 # user
+  content: "Other user's question"
+  feedback: 0 # none
+  status: 2 # complete

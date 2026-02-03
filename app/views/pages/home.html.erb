@@ -24,15 +24,27 @@
         <%= link_to conversations_path, class: "btn btn-primary btn-lg" do %>
           <i class="fas fa-comments me-2"></i>Start Chatting
         <% end %>
+        <% if current_user.admin? %>
+          <%= link_to admin_root_path, class: "btn btn-outline-danger btn-lg ms-2" do %>
+            <i class="fas fa-cog me-2"></i>Admin Dashboard
+          <% end %>
+        <% end %>
       <% else %>
         <%= link_to new_user_session_path, class: "btn btn-primary btn-lg" do %>
           <i class="fas fa-sign-in-alt me-2"></i>Sign In
         <% end %>
-        <%= link_to new_user_registration_path, class: "btn btn-outline-primary btn-lg" do %>
-          <i class="fas fa-user-plus me-2"></i>Create Account
+        <%= link_to admin_login_path, class: "btn btn-outline-danger btn-lg ms-2" do %>
+          <i class="fas fa-user-shield me-2"></i>Login as Admin
         <% end %>
       <% end %>
     </div>
+    
+    <% unless user_signed_in? %>
+      <p class="hero-note text-muted mt-3">
+        <i class="fas fa-info-circle me-1"></i>
+        Contact your administrator for account credentials.
+      </p>
+    <% end %>
   </div>
 </section>
 

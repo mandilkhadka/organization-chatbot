@@ -1,10 +1,28 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'users/registrations' }
   root to: "pages#home"
+
+  # Admin authentication routes (outside namespace for custom paths)
+  get "admin/login", to: "admin/sessions#new", as: :admin_login
+  post "admin/login", to: "admin/sessions#create"
+  delete "admin/logout", to: "admin/sessions#destroy", as: :admin_logout
 
   # Admin routes
   namespace :admin do
-    resources :documents, only: [:index, :new, :create, :destroy]
+    root to: "dashboard#index"
+    resources :dashboard, only: [:index]
+    resources :documents, only: [:index, :new, :create, :destroy] do
+      collection do
+        post :bulk_create
+      end
+    end
+    resources :users do
+      member do
+        patch :toggle_status
+      end
+    end
+    resources :categories
+    resources :audit_logs, only: [:index, :show]
   end
 
   # Chat routes

@@ -32,20 +32,7 @@
       <!-- Input Area -->
       <div class="chat-input-area">
         <div class="chat-input-wrapper">
-          <%= form_with url: conversation_messages_path(conversation), method: :post, class: "chat-input-group", data: { controller: "chat", action: "turbo:submit-end->chat#reset" } do |f| %>
-            <input
-              type="text"
-              name="message[content]"
-              class="form-control"
-              placeholder="Ask a question about company policies..."
-              autocomplete="off"
-              data-chat-target="input"
-              required
-            >
-            <button type="submit" class="btn btn-primary btn-send">
-              <i class="fas fa-paper-plane"></i>
-            </button>
-          <% end %>
+          <%= render "messages/form", conversation: conversation %>
         </div>
       </div>
     <% else %>

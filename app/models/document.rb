@@ -1,5 +1,6 @@
 class Document < ApplicationRecord
   belongs_to :user
+  belongs_to :category, optional: true, counter_cache: true
   has_many :document_chunks, dependent: :destroy
   has_one_attached :file
 

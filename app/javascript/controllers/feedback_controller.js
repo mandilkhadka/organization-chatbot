@@ -1,11 +1,15 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static values = { conversationId: String };
+
   async submit(event) {
     const button = event.currentTarget;
     const messageId = button.dataset.messageId;
     const feedback = button.dataset.feedback;
-    const conversationId = window.location.pathname.split("/")[2];
+    const conversationId = this.hasConversationIdValue
+      ? this.conversationIdValue
+      : window.location.pathname.split("/")[2];
 
     try {
       const response = await fetch(

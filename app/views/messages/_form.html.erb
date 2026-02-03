@@ -1,0 +1,25 @@
+<%= form_with url: conversation_messages_path(conversation),
+             method: :post,
+             id: "chat-form",
+             class: "chat-input-group",
+             data: {
+               controller: "chat",
+               action: "turbo:submit-start->chat#disable turbo:submit-end->chat#enable"
+             } do |f| %>
+  <input
+    type="text"
+    name="message[content]"
+    class="form-control"
+    placeholder="Ask a question about company policies..."
+    autocomplete="off"
+    maxlength="2000"
+    data-chat-target="input"
+    data-action="keydown->chat#submitOnEnter"
+    aria-label="Message input"
+    required
+  >
+  <button type="submit" class="btn btn-primary btn-send" data-chat-target="button">
+    <i class="fas fa-paper-plane" data-chat-target="icon"></i>
+    <span class="spinner-border spinner-border-sm d-none" data-chat-target="spinner"></span>
+  </button>
+<% end %>

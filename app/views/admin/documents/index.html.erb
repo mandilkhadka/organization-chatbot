@@ -4,9 +4,37 @@
       <i class="fas fa-folder-open"></i>
       Document Management
     </h1>
-    <%= link_to new_admin_document_path, class: "btn btn-primary" do %>
-      <i class="fas fa-upload me-2"></i>Upload Document
-    <% end %>
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#bulkUploadModal">
+        <i class="fas fa-upload me-2"></i>Bulk Upload
+      </button>
+      <%= link_to new_admin_document_path, class: "btn btn-primary" do %>
+        <i class="fas fa-plus me-2"></i>Upload Document
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="card mb-4">
+    <div class="card-body py-2">
+      <%= form_with url: admin_documents_path, method: :get, local: true, class: "row align-items-center g-2" do %>
+        <div class="col-auto">
+          <label class="col-form-label">Filter by Category:</label>
+        </div>
+        <div class="col-auto">
+          <%= select_tag :category_id,
+              options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
+              include_blank: "All Categories",
+              class: "form-select",
+              onchange: "this.form.submit()" %>
+        </div>
+        <% if params[:category_id].present? %>
+          <div class="col-auto">
+            <%= link_to "Clear", admin_documents_path, class: "btn btn-outline-secondary btn-sm" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 
   <% if @documents.empty? %>
@@ -30,6 +58,7 @@
           <tr>
             <th>Title</th>
             <th>Filename</th>
+            <th>Category</th>
             <th>Status</th>
             <th>Chunks</th>
             <th>Uploaded</th>
@@ -42,4 +71,71 @@
       </table>
     </div>
   <% end %>
+</div>
+
+<!-- Bulk Upload Modal -->
+<div class="modal fade" id="bulkUploadModal" tabindex="-1" aria-labelledby="bulkUploadModalLabel" aria-hidden="true" data-controller="bulk-upload">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bulkUploadModalLabel">
+          <i class="fas fa-upload me-2"></i>Bulk Upload Documents
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Title Prefix (optional)</label>
+          <input type="text" class="form-control" data-bulk-upload-target="titlePrefix" placeholder="e.g., Policy Document">
+          <div class="form-text">Will be prepended to each filename</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Category (optional)</label>
+          <%= select_tag "bulk_category_id",
+              options_from_collection_for_select(@categories, :id, :name),
+              include_blank: "-- No Category --",
+              class: "form-select",
+              data: { bulk_upload_target: "categoryId" } %>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Select Files (max 20)</label>
+          <input type="file" class="form-control" multiple accept=".pdf,.docx,.txt"
+                 data-bulk-upload-target="files"
+                 data-action="change->bulk-upload#filesSelected">
+          <div class="form-text">Supported: PDF, DOCX, TXT (max 10MB each)</div>
+        </div>
+
+        <div data-bulk-upload-target="fileList" class="mb-3" style="display: none;">
+          <label class="form-label">Selected Files:</label>
+          <ul class="list-group" data-bulk-upload-target="fileListItems"></ul>
+        </div>
+
+        <div data-bulk-upload-target="results" class="mb-3" style="display: none;">
+          <div class="alert alert-success" data-bulk-upload-target="successAlert" style="display: none;">
+            <strong>Successful uploads:</strong>
+            <ul data-bulk-upload-target="successList" class="mb-0"></ul>
+          </div>
+          <div class="alert alert-danger" data-bulk-upload-target="errorAlert" style="display: none;">
+            <strong>Failed uploads:</strong>
+            <ul data-bulk-upload-target="errorList" class="mb-0"></ul>
+          </div>
+        </div>
+
+        <div data-bulk-upload-target="progress" class="mb-3" style="display: none;">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+          </div>
+          <p class="text-center mt-2 text-muted">Uploading documents...</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bulk-upload-target="uploadBtn" data-action="click->bulk-upload#upload" disabled>
+          <i class="fas fa-cloud-upload-alt me-2"></i>Upload Files
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

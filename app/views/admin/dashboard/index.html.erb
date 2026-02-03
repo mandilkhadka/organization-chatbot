@@ -1,0 +1,198 @@
+<div class="container py-4">
+  <div class="admin-header">
+    <h1>
+      <i class="fas fa-tachometer-alt"></i>
+      Admin Dashboard
+    </h1>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6 col-lg-3">
+      <div class="stat-card stat-card-users">
+        <div class="stat-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <span class="stat-number"><%= @total_users %></span>
+          <span class="stat-title">Total Users</span>
+        </div>
+        <div class="stat-breakdown">
+          <span><%= @total_employees %> employees</span>
+          <span><%= @total_admins %> admins</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="stat-card stat-card-documents">
+        <div class="stat-icon">
+          <i class="fas fa-folder-open"></i>
+        </div>
+        <div class="stat-content">
+          <span class="stat-number"><%= @total_documents %></span>
+          <span class="stat-title">Documents</span>
+        </div>
+        <div class="stat-breakdown">
+          <span><%= @documents_ready %> ready</span>
+          <span><%= @documents_processing %> processing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="stat-card stat-card-conversations">
+        <div class="stat-icon">
+          <i class="fas fa-comments"></i>
+        </div>
+        <div class="stat-content">
+          <span class="stat-number"><%= @total_conversations %></span>
+          <span class="stat-title">Conversations</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="stat-card stat-card-messages">
+        <div class="stat-icon">
+          <i class="fas fa-comment-dots"></i>
+        </div>
+        <div class="stat-content">
+          <span class="stat-number"><%= @total_messages %></span>
+          <span class="stat-title">Messages</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-bolt me-2"></i>Quick Actions
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="quick-actions">
+            <%= link_to new_admin_user_path, class: "quick-action-btn" do %>
+              <div class="action-icon bg-primary-subtle">
+                <i class="fas fa-user-plus text-primary"></i>
+              </div>
+              <span>Add Employee</span>
+            <% end %>
+
+            <%= link_to new_admin_document_path, class: "quick-action-btn" do %>
+              <div class="action-icon bg-success-subtle">
+                <i class="fas fa-upload text-success"></i>
+              </div>
+              <span>Upload Document</span>
+            <% end %>
+
+            <%= link_to admin_users_path, class: "quick-action-btn" do %>
+              <div class="action-icon bg-info-subtle">
+                <i class="fas fa-users-cog text-info"></i>
+              </div>
+              <span>Manage Users</span>
+            <% end %>
+
+            <%= link_to admin_documents_path, class: "quick-action-btn" do %>
+              <div class="action-icon bg-warning-subtle">
+                <i class="fas fa-file-alt text-warning"></i>
+              </div>
+              <span>View Documents</span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Recent Users -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            <i class="fas fa-user-clock me-2"></i>Recent Users
+          </h5>
+          <%= link_to admin_users_path, class: "btn btn-sm btn-outline-primary" do %>
+            View All
+          <% end %>
+        </div>
+        <div class="card-body p-0">
+          <% if @recent_users.empty? %>
+            <div class="admin-empty-state py-4">
+              <p class="mb-0">No users yet.</p>
+            </div>
+          <% else %>
+            <div class="recent-list">
+              <% @recent_users.each do |user| %>
+                <div class="recent-item">
+                  <div class="recent-icon">
+                    <i class="fas fa-user-circle"></i>
+                  </div>
+                  <div class="recent-info">
+                    <span class="recent-title"><%= user.email %></span>
+                    <span class="recent-meta">
+                      <%= user.role.titleize %> · <%= time_ago_in_words(user.created_at) %> ago
+                    </span>
+                  </div>
+                  <% if user.admin? %>
+                    <span class="badge badge-admin">Admin</span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Documents -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            <i class="fas fa-file-alt me-2"></i>Recent Documents
+          </h5>
+          <%= link_to admin_documents_path, class: "btn btn-sm btn-outline-primary" do %>
+            View All
+          <% end %>
+        </div>
+        <div class="card-body p-0">
+          <% if @recent_documents.empty? %>
+            <div class="admin-empty-state py-4">
+              <p class="mb-0">No documents yet.</p>
+            </div>
+          <% else %>
+            <div class="recent-list">
+              <% @recent_documents.each do |doc| %>
+                <div class="recent-item">
+                  <div class="recent-icon">
+                    <i class="fas <%= doc.content_type&.include?('pdf') ? 'fa-file-pdf' : 'fa-file-alt' %>"></i>
+                  </div>
+                  <div class="recent-info">
+                    <span class="recent-title"><%= doc.title %></span>
+                    <span class="recent-meta">
+                      by <%= doc.user&.email&.split('@')&.first || 'Unknown' %> · <%= time_ago_in_words(doc.created_at) %> ago
+                    </span>
+                  </div>
+                  <% case doc.status %>
+                  <% when "ready" %>
+                    <span class="badge bg-success">Ready</span>
+                  <% when "processing", "pending" %>
+                    <span class="badge bg-warning">Processing</span>
+                  <% when "failed" %>
+                    <span class="badge bg-danger">Failed</span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

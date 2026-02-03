@@ -6,6 +6,13 @@
     <span class="document-filename"><%= document.filename %></span>
   </td>
   <td>
+    <% if document.category %>
+      <span class="badge bg-secondary"><%= document.category.name %></span>
+    <% else %>
+      <span class="text-muted">—</span>
+    <% end %>
+  </td>
+  <td>
     <% case document.status %>
     <% when "pending" %>
       <span class="badge-status-pending">Pending</span>

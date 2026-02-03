@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+employee_conversation:
+  user: employee_one
+  title: "Employee's Conversation"
+
+employee_empty_conversation:
+  user: employee_one
+  title: "New Conversation"
+
+admin_conversation:
+  user: admin_one
+  title: "Admin's Conversation"
+
+other_user_conversation:
+  user: employee_two
+  title: "Another User's Conversation"

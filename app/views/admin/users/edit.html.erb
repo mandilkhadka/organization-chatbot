@@ -1,0 +1,67 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="admin-header mb-4">
+        <h1>
+          <i class="fas fa-user-edit"></i>
+          Edit User
+        </h1>
+      </div>
+
+      <div class="upload-form">
+        <%= form_with model: [:admin, @user], local: true do |f| %>
+          <% if @user.errors.any? %>
+            <div class="alert alert-danger mb-4">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              <div>
+                <strong>Please fix the following errors:</strong>
+                <ul class="mb-0 mt-2">
+                  <% @user.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="mb-4">
+            <%= f.label :email, class: "form-label" %>
+            <%= f.email_field :email, class: "form-control form-control-lg", placeholder: "employee@company.com" %>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :password, "New Password", class: "form-label" %>
+            <%= f.password_field :password, class: "form-control form-control-lg", placeholder: "Leave blank to keep current password" %>
+            <div class="form-text mt-2">
+              <i class="fas fa-info-circle me-1"></i>
+              Leave blank if you don't want to change the password
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :password_confirmation, "Confirm New Password", class: "form-label" %>
+            <%= f.password_field :password_confirmation, class: "form-control form-control-lg", placeholder: "Confirm new password" %>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :role, class: "form-label" %>
+            <%= f.select :role, User.roles.keys.map { |r| [r.titleize, r] }, {}, class: "form-select form-select-lg" %>
+            <% if @user == current_user %>
+              <div class="form-text mt-2 text-warning">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                Changing your own role to Employee will remove your admin access
+              </div>
+            <% end %>
+          </div>
+
+          <div class="d-flex gap-3 pt-2">
+            <%= link_to admin_users_path, class: "btn btn-secondary" do %>
+              <i class="fas fa-arrow-left me-2"></i>Cancel
+            <% end %>
+            <%= f.submit "Update User", class: "btn btn-primary flex-grow-1" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
