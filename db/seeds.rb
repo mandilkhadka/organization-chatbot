@@ -13,7 +13,7 @@ admin_password = ENV.fetch("ADMIN_PASSWORD") do
       puts "   SAVE THIS PASSWORD - it won't be shown again!"
     end
   else
-    "admin123" # Only use weak password in development
+    "Admin123Dev456" # Meets 12+ char minimum
   end
 end
 

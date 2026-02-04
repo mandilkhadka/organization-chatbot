@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # :confirmable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :lockable
 
   enum role: { employee: 0, admin: 1 }
 
@@ -27,7 +27,8 @@ class User < ApplicationRecord
     admin_session_expires_at < Time.current
   end
 
-  def refresh_admin_session!(timeout_minutes: 30)
+  def refresh_admin_session!(timeout_minutes: nil)
+    timeout_minutes ||= ENV.fetch("ADMIN_SESSION_TIMEOUT_MINUTES", 30).to_i
     update!(admin_session_expires_at: timeout_minutes.minutes.from_now)
   end
 
@@ -35,11 +36,14 @@ class User < ApplicationRecord
     update!(admin_session_expires_at: nil)
   end
 
-  # Only refresh session if within 5 minutes of expiration
+  # Only refresh session if within threshold of expiration
   # This prevents unnecessary database writes on every request
-  def refresh_admin_session_if_needed!(timeout_minutes: 30, refresh_threshold_minutes: 5)
+  def refresh_admin_session_if_needed!(timeout_minutes: nil, refresh_threshold_minutes: nil)
     return unless admin?
     return if admin_session_expires_at.nil?
+
+    timeout_minutes ||= ENV.fetch("ADMIN_SESSION_TIMEOUT_MINUTES", 30).to_i
+    refresh_threshold_minutes ||= ENV.fetch("ADMIN_SESSION_REFRESH_THRESHOLD_MINUTES", 5).to_i
 
     # Only refresh if session expires within the threshold
     if admin_session_expires_at < refresh_threshold_minutes.minutes.from_now

@@ -11,9 +11,26 @@ module Admin
 
     def create
       user = User.find_by(email: params[:email]&.downcase)
+      password = params[:password]
 
-      # Use constant-time comparison and generic error messages to prevent user enumeration
-      if user&.valid_password?(params[:password]) && user.admin?
+      # Constant-time authentication to prevent timing attacks
+      # Always perform password check even if user is nil
+      if user.present?
+        valid_password = user.valid_password?(password)
+        is_admin = user.admin?
+        is_locked = user.access_locked?
+      else
+        # Perform dummy bcrypt comparison to maintain constant time
+        BCrypt::Password.create("dummy").is_password?(password || "")
+        valid_password = false
+        is_admin = false
+        is_locked = false
+      end
+
+      if is_locked
+        flash.now[:alert] = "Account is locked. Please try again later."
+        render :new, status: :unprocessable_entity
+      elsif valid_password && is_admin
         sign_in(user)
         user.refresh_admin_session!
         AdminAuditLog.log_action(user: user, action: "login", request: request)
