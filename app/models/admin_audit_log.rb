@@ -4,7 +4,7 @@ class AdminAuditLog < ApplicationRecord
   validates :action, presence: true
   validates :resource_type, presence: true
 
-  ACTIONS = %w[login logout session_timeout create update delete bulk_create].freeze
+  ACTIONS = %w[login logout session_timeout create update delete bulk_create role_change].freeze
 
   # Whitelist of allowed resource types to prevent unsafe constantize
   ALLOWED_RESOURCE_TYPES = %w[Document Category User System].freeze

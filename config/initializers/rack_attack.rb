@@ -1,5 +1,14 @@
 # Rate limiting configuration for security
 class Rack::Attack
+  # The cache store powers throttle counters. Rails.cache defaults to a
+  # NullStore in dev which silently disables every throttle. Use a real
+  # store (Memory in dev, whatever Rails.cache resolves to elsewhere).
+  Rack::Attack.cache.store =
+    if Rails.env.development? || Rails.env.test?
+      ActiveSupport::Cache::MemoryStore.new
+    else
+      Rails.cache
+    end
   # Throttle admin login attempts by IP address
   # Limit to 5 requests per 20 seconds per IP
   throttle("admin_login/ip", limit: 5, period: 20.seconds) do |req|

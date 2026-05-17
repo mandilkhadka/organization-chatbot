@@ -84,8 +84,15 @@ module Admin
         redirect_to admin_users_path, alert: "You cannot demote yourself." and return
       end
 
+      previous_role = @user.role
       if @user.update(role: new_role)
-        audit_resource(@user)
+        AdminAuditLog.log_action(
+          user: current_user,
+          action: "role_change",
+          resource: @user,
+          change_data: { "role" => [previous_role, new_role] },
+          request: request
+        )
         redirect_to admin_users_path, notice: "Role updated to #{new_role.titleize}."
       else
         redirect_to admin_users_path, alert: @user.errors.full_messages.to_sentence

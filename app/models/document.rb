@@ -30,19 +30,18 @@ class Document < ApplicationRecord
   def acceptable_file_type
     return unless file.attached?
 
-    # SECURITY: Don't trust the uploader-supplied content_type. Sniff the
-    # actual MIME type from magic bytes via Marcel.
-    sniffed_type = nil
-    file.open do |tempfile|
-      sniffed_type = Marcel::MimeType.for(tempfile, name: file.filename.to_s)
-    end
+    # SECURITY: Don't trust the uploader-supplied content_type. ActiveStorage's
+    # blob unfurl already calls Marcel::MimeType.for on the upload IO, so
+    # file.blob.content_type is the magic-byte-sniffed type — not the upload
+    # header. We just have to verify it's in our allow-list.
+    sniffed_type = file.blob&.content_type.to_s
 
     if sniffed_type.blank? || SUPPORTED_CONTENT_TYPES.exclude?(sniffed_type)
       errors.add(:file, "must be a PDF, DOCX, or TXT file (detected: #{sniffed_type.presence || 'unknown'})")
       return
     end
 
-    # Normalize stored content_type to the sniffed value, not the upload header.
+    # Normalize stored content_type to the sniffed value.
     self.content_type = sniffed_type
   end
 
