@@ -77,6 +77,12 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Coverage reporting
+  gem "simplecov", require: false
+
+  # HTTP stubbing for service tests (Gemini API etc.)
+  gem "webmock"
 end
 
 gem 'ollama-ai', '~> 1.3.0'

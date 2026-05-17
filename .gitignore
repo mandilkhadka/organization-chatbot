@@ -50,3 +50,4 @@
 # Ignore byebug/debugger history
 .byebug_history
 .irb_history
+coverage/
