@@ -38,10 +38,20 @@ class AdminAuditLog < ApplicationRecord
     )
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error("CRITICAL: Failed to create audit log: #{e.message}")
-    # Re-raise in development to catch issues early
+    # Report to the Rails error reporter so any subscribed backend (Sentry,
+    # Honeybadger, etc.) gets the event. Never swallow silently in any env.
+    Rails.error.report(
+      e,
+      handled: true,
+      severity: :error,
+      context: {
+        audit_user_id: user&.id,
+        audit_action: action,
+        audit_resource_type: resource&.class&.name,
+        audit_resource_id: resource&.id
+      }
+    )
     raise if Rails.env.development? || Rails.env.test?
-    # In production, notify error tracking service
-    # Sentry.capture_exception(e) if defined?(Sentry)
     nil
   end
 end

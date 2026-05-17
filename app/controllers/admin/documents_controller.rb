@@ -2,8 +2,8 @@ module Admin
   class DocumentsController < Admin::BaseController
     include Auditable
 
-    MAX_BULK_FILES = 20
-    MAX_FILE_SIZE = 10.megabytes
+    MAX_BULK_FILES = (ENV.fetch("MAX_BULK_FILES", "20")).to_i
+    MAX_FILE_SIZE = Document::MAX_FILE_SIZE_BYTES
 
     def index
       @documents = Document.includes(:user, :category).order(created_at: :desc)

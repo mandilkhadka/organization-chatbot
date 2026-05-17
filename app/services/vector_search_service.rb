@@ -2,6 +2,10 @@ class VectorSearchService
   DEFAULT_LIMIT = 5
   DEFAULT_THRESHOLD = 0.5
 
+  # Hard cap on the Ruby-fallback scan to keep large corpora from OOMing.
+  # The pgvector path has no equivalent cap because it streams via the index.
+  RUBY_FALLBACK_MAX_CHUNKS = (ENV.fetch("RUBY_FALLBACK_MAX_CHUNKS", "5000")).to_i
+
   def initialize(embedding_service: EmbeddingService.new)
     @embedding_service = embedding_service
   end
@@ -43,8 +47,14 @@ class VectorSearchService
   end
 
   def search_with_ruby(query_embedding, limit, threshold)
-    # Fallback: compute cosine similarity in Ruby (slower but works without pgvector)
-    chunks = DocumentChunk.with_embeddings.includes(:document).to_a
+    # Fallback: compute cosine similarity in Ruby (slower but works without pgvector).
+    # Capped to avoid scanning the entire corpus into memory.
+    relation = DocumentChunk.with_embeddings.includes(:document).limit(RUBY_FALLBACK_MAX_CHUNKS)
+    total = DocumentChunk.with_embeddings.count
+    if total > RUBY_FALLBACK_MAX_CHUNKS
+      Rails.logger.warn("VectorSearchService: Ruby fallback capped at #{RUBY_FALLBACK_MAX_CHUNKS} of #{total} chunks. Install pgvector for full search.")
+    end
+    chunks = relation.to_a
 
     scored_chunks = chunks.filter_map do |chunk|
       stored_embedding = parse_embedding(chunk.embedding)

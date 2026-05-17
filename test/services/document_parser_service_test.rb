@@ -7,7 +7,7 @@ class DocumentParserServiceTest < ActiveSupport::TestCase
 
   test "raises UnsupportedFormatError for unknown content type" do
     fake_doc = OpenStruct.new(content_type: "application/zip", file: nil)
-    err = assert_raises(DocumentParserService::ParseError) do
+    err = assert_raises(DocumentParserService::UnsupportedFormatError) do
       @parser.parse(fake_doc)
     end
     assert_includes err.message, "Unsupported format"
@@ -20,6 +20,15 @@ class DocumentParserServiceTest < ActiveSupport::TestCase
     result = @parser.parse(fake_doc)
     assert_includes result, "Hello world"
     assert_equal Encoding::UTF_8, result.encoding
+  end
+
+  test "truncates extracted text above MAX_EXTRACTED_BYTES" do
+    oversized = "x" * (DocumentParserService::MAX_EXTRACTED_BYTES + 1024)
+    txt_blob = OpenStruct.new(download: oversized)
+    fake_doc = OpenStruct.new(content_type: "text/plain", file: txt_blob)
+
+    result = @parser.parse(fake_doc)
+    assert_operator result.bytesize, :<=, DocumentParserService::MAX_EXTRACTED_BYTES
   end
 
   test "wraps lower-level parse failures in ParseError" do

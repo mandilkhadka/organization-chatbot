@@ -13,7 +13,12 @@ Rails.application.configure do
     # SECURITY: Removed :unsafe_inline - using nonces instead for XSS protection
     policy.script_src  :self, "https://cdnjs.cloudflare.com"
     policy.style_src   :self, "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"
-    policy.connect_src :self, :https, "wss://#{ENV.fetch('CABLE_HOST', 'localhost')}:*"
+    # SECURITY: Restrict outbound XHR/fetch/WebSocket targets to known origins.
+    # ActionCable WebSocket origin can be overridden via CABLE_HOST.
+    cable_host = ENV.fetch('CABLE_HOST', 'localhost')
+    policy.connect_src :self,
+                       "ws://#{cable_host}:*",
+                       "wss://#{cable_host}:*"
     policy.frame_ancestors :none
     policy.base_uri    :self
     policy.form_action :self

@@ -17,24 +17,16 @@ class DocumentChunk < ApplicationRecord
       end
     end
 
-    # Lazily configure has_neighbors only when pgvector is available
+    # Lazily configure has_neighbors only when pgvector is available.
+    # VectorSearchService calls this before issuing a nearest-neighbors query.
     def configure_neighbors!
       return if @neighbors_configured
 
       @neighbors_configured = true
       has_neighbors :embedding if pgvector_enabled?
     rescue StandardError
-      # Silently continue if configuration fails
+      # Silently continue if configuration fails — the Ruby fallback will be used.
     end
-  end
-
-  # Configure neighbors on first query
-  after_initialize :ensure_neighbors_configured, if: :new_record?
-
-  private
-
-  def ensure_neighbors_configured
-    self.class.configure_neighbors!
   end
 
   def relevance_score
