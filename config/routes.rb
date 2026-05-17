@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     resources :users do
       member do
         patch :toggle_status
+        patch :update_role
       end
     end
     resources :categories

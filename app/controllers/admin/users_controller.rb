@@ -2,7 +2,7 @@ module Admin
   class UsersController < Admin::BaseController
     include Auditable
 
-    before_action :set_user, only: %i[show edit update destroy toggle_status]
+    before_action :set_user, only: %i[show edit update destroy toggle_status update_role]
     rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
     def index
@@ -27,7 +27,9 @@ module Admin
     end
 
     def create
-      @user = User.new(user_params)
+      # SECURITY: role is NOT mass-assignable. New users default to :employee.
+      # Promotion to admin must go through update_role (audited).
+      @user = User.new(user_params.merge(role: :employee))
 
       if @user.save
         audit_resource(@user)
@@ -77,14 +79,35 @@ module Admin
       redirect_to admin_users_path, notice: "User status updated."
     end
 
+    # Dedicated, audited role change endpoint.
+    # SECURITY: role changes go through here, never via user_params.
+    def update_role
+      new_role = params[:role].to_s
+      unless User.roles.key?(new_role)
+        redirect_to admin_users_path, alert: "Invalid role." and return
+      end
+
+      if @user == current_user && new_role != "admin"
+        redirect_to admin_users_path, alert: "You cannot demote yourself." and return
+      end
+
+      if @user.update(role: new_role)
+        audit_resource(@user)
+        redirect_to admin_users_path, notice: "Role updated to #{new_role.titleize}."
+      else
+        redirect_to admin_users_path, alert: @user.errors.full_messages.to_sentence
+      end
+    end
+
     private
 
     def set_user
       @user = User.find(params[:id])
     end
 
+    # SECURITY: :role is intentionally excluded. Use update_role action.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :role)
+      params.require(:user).permit(:email, :password, :password_confirmation)
     end
 
     def user_not_found

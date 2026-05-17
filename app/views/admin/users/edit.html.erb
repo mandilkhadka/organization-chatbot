@@ -43,23 +43,30 @@
             <%= f.password_field :password_confirmation, class: "form-control form-control-lg", placeholder: "Confirm new password" %>
           </div>
 
-          <div class="mb-4">
-            <%= f.label :role, class: "form-label" %>
-            <%= f.select :role, User.roles.keys.map { |r| [r.titleize, r] }, {}, class: "form-select form-select-lg" %>
-            <% if @user == current_user %>
-              <div class="form-text mt-2 text-warning">
-                <i class="fas fa-exclamation-triangle me-1"></i>
-                Changing your own role to Employee will remove your admin access
-              </div>
-            <% end %>
-          </div>
-
           <div class="d-flex gap-3 pt-2">
             <%= link_to admin_users_path, class: "btn btn-secondary" do %>
               <i class="fas fa-arrow-left me-2"></i>Cancel
             <% end %>
             <%= f.submit "Update User", class: "btn btn-primary flex-grow-1" %>
           </div>
+        <% end %>
+      </div>
+
+      <div class="upload-form mt-4">
+        <h5><i class="fas fa-user-shield me-2"></i>Change Role</h5>
+        <p class="text-muted small">Current role: <strong><%= @user.role.titleize %></strong></p>
+        <%= form_with url: update_role_admin_user_path(@user), method: :patch, local: true do |f| %>
+          <div class="mb-3">
+            <%= label_tag :role, "New Role", class: "form-label" %>
+            <%= select_tag :role, options_for_select(User.roles.keys.map { |r| [r.titleize, r] }, @user.role), class: "form-select form-select-lg" %>
+            <% if @user == current_user %>
+              <div class="form-text mt-2 text-warning">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                You cannot demote yourself. The system also prevents demoting the last admin.
+              </div>
+            <% end %>
+          </div>
+          <%= submit_tag "Change Role", class: "btn btn-warning", data: { confirm: "Are you sure you want to change this user's role?" } %>
         <% end %>
       </div>
     </div>

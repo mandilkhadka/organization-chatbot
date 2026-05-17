@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_02_11_122906) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_17_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -84,8 +84,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_02_11_122906) do
     t.jsonb "metadata", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "embedding"
+    t.vector "embedding", limit: 768
     t.index ["document_id"], name: "index_document_chunks_on_document_id"
+    t.index ["embedding"], name: "index_document_chunks_on_embedding", opclass: :vector_cosine_ops, using: :ivfflat
   end
 
   create_table "documents", force: :cascade do |t|
