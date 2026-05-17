@@ -30,7 +30,10 @@ class DocumentParserService
   def enforce_text_cap!(text)
     return text if text.bytesize <= MAX_EXTRACTED_BYTES
 
-    Rails.logger.warn("DocumentParserService: truncating extracted text from #{text.bytesize} to #{MAX_EXTRACTED_BYTES} bytes")
+    Rails.logger.warn(
+      "DocumentParserService: truncating extracted text " \
+      "from #{text.bytesize} to #{MAX_EXTRACTED_BYTES} bytes"
+    )
     text.byteslice(0, MAX_EXTRACTED_BYTES).force_encoding("UTF-8").scrub("")
   end
 

@@ -2,7 +2,7 @@ module Admin
   class CategoriesController < BaseController
     include Auditable
 
-    before_action :set_category, only: [:show, :edit, :update, :destroy]
+    before_action :set_category, only: %i[show edit update destroy]
 
     def index
       @categories = Category.alphabetical.includes(:documents)
@@ -44,11 +44,11 @@ module Admin
       @category.destroy
       audit_resource(@category)
 
-      notice = if documents_count > 0
-        "Category deleted. #{documents_count} document(s) were unassigned."
-      else
-        "Category deleted successfully"
-      end
+      notice = if documents_count.positive?
+                 "Category deleted. #{documents_count} document(s) were unassigned."
+               else
+                 "Category deleted successfully"
+               end
       redirect_to admin_categories_path, notice: notice
     end
 

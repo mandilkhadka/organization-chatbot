@@ -2,8 +2,8 @@ module Admin
   class SessionsController < ApplicationController
     layout "admin_login"
 
-    skip_before_action :authenticate_user!, only: [:new, :create]
-    before_action :redirect_if_authenticated, only: [:new, :create]
+    skip_before_action :authenticate_user!, only: %i[new create]
+    before_action :redirect_if_authenticated, only: %i[new create]
 
     def new
       # Render login form

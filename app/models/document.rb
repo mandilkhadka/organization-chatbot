@@ -49,17 +49,17 @@ class Document < ApplicationRecord
   def acceptable_file_size
     return unless file.attached?
 
-    if file.byte_size > MAX_FILE_SIZE_BYTES
-      errors.add(:file, "is too large (maximum is #{MAX_FILE_SIZE_BYTES / 1.megabyte} MB)")
-    end
+    return unless file.byte_size > MAX_FILE_SIZE_BYTES
+
+    errors.add(:file, "is too large (maximum is #{MAX_FILE_SIZE_BYTES / 1.megabyte} MB)")
   end
 
   def non_empty_file
     return unless file.attached?
 
-    if file.byte_size.to_i.zero?
-      errors.add(:file, "is empty")
-    end
+    return unless file.byte_size.to_i.zero?
+
+    errors.add(:file, "is empty")
   end
 
   def process_document

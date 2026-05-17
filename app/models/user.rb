@@ -47,9 +47,9 @@ class User < ApplicationRecord
     refresh_threshold_minutes ||= ENV.fetch("ADMIN_SESSION_REFRESH_THRESHOLD_MINUTES", 5).to_i
 
     # Only refresh if session expires within the threshold
-    if admin_session_expires_at < refresh_threshold_minutes.minutes.from_now
-      refresh_admin_session!(timeout_minutes: timeout_minutes)
-    end
+    return unless admin_session_expires_at < refresh_threshold_minutes.minutes.from_now
+
+    refresh_admin_session!(timeout_minutes: timeout_minutes)
   end
 
   private

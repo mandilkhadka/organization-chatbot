@@ -20,7 +20,7 @@ class EmbeddingJob < ApplicationJob
     # Check if all chunks are embedded and mark document as ready
     document = chunk.document
     # Use count query instead of where(embedding: nil) for better pgvector compatibility
-    if document.document_chunks.where("embedding IS NULL").count.zero?
+    if document.document_chunks.where("embedding IS NULL").none?
       document.ready!
       Rails.logger.info("Document #{document.id} is ready with all embeddings generated")
     end

@@ -52,6 +52,7 @@ class AdminAuditLog < ApplicationRecord
       }
     )
     raise if Rails.env.development? || Rails.env.test?
+
     nil
   end
 end

@@ -4,7 +4,7 @@ class VectorSearchService
 
   # Hard cap on the Ruby-fallback scan to keep large corpora from OOMing.
   # The pgvector path has no equivalent cap because it streams via the index.
-  RUBY_FALLBACK_MAX_CHUNKS = (ENV.fetch("RUBY_FALLBACK_MAX_CHUNKS", "5000")).to_i
+  RUBY_FALLBACK_MAX_CHUNKS = ENV.fetch("RUBY_FALLBACK_MAX_CHUNKS", "5000").to_i
 
   def initialize(embedding_service: EmbeddingService.new)
     @embedding_service = embedding_service
@@ -34,11 +34,11 @@ class VectorSearchService
     # Fetch more results than needed to account for threshold filtering
     # neighbor_distance is computed dynamically, so we filter in Ruby after fetching
     results = DocumentChunk
-      .with_embeddings
-      .includes(:document)
-      .nearest_neighbors(:embedding, query_embedding, distance: "cosine")
-      .limit(limit * 3)
-      .to_a
+              .with_embeddings
+              .includes(:document)
+              .nearest_neighbors(:embedding, query_embedding, distance: "cosine")
+              .limit(limit * 3)
+              .to_a
 
     # Apply threshold filter and take the requested limit
     results
@@ -52,7 +52,10 @@ class VectorSearchService
     relation = DocumentChunk.with_embeddings.includes(:document).limit(RUBY_FALLBACK_MAX_CHUNKS)
     total = DocumentChunk.with_embeddings.count
     if total > RUBY_FALLBACK_MAX_CHUNKS
-      Rails.logger.warn("VectorSearchService: Ruby fallback capped at #{RUBY_FALLBACK_MAX_CHUNKS} of #{total} chunks. Install pgvector for full search.")
+      Rails.logger.warn(
+        "VectorSearchService: Ruby fallback capped at #{RUBY_FALLBACK_MAX_CHUNKS} of " \
+        "#{total} chunks. Install pgvector for full search."
+      )
     end
     chunks = relation.to_a
 

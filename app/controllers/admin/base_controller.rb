@@ -7,10 +7,10 @@ module Admin
     private
 
     def require_admin
-      unless current_user&.admin?
-        flash[:alert] = "Admin access required"
-        redirect_to admin_login_path and return
-      end
+      return if current_user&.admin?
+
+      flash[:alert] = "Admin access required"
+      redirect_to admin_login_path and return
     end
 
     def check_admin_session_timeout

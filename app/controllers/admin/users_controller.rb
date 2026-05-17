@@ -2,7 +2,7 @@ module Admin
   class UsersController < Admin::BaseController
     include Auditable
 
-    before_action :set_user, only: %i[show edit update destroy toggle_status update_role]
+    before_action :set_user, only: %i[show edit update destroy update_role]
     rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
     def index
@@ -74,18 +74,11 @@ module Admin
       end
     end
 
-    def toggle_status
-      # We'll add an active field later, for now this is a placeholder
-      redirect_to admin_users_path, notice: "User status updated."
-    end
-
     # Dedicated, audited role change endpoint.
     # SECURITY: role changes go through here, never via user_params.
     def update_role
       new_role = params[:role].to_s
-      unless User.roles.key?(new_role)
-        redirect_to admin_users_path, alert: "Invalid role." and return
-      end
+      redirect_to admin_users_path, alert: "Invalid role." and return unless User.roles.key?(new_role)
 
       if @user == current_user && new_role != "admin"
         redirect_to admin_users_path, alert: "You cannot demote yourself." and return

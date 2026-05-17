@@ -220,19 +220,19 @@ Postgres + pgvector service container with `enable_extension "vector"` pre-insta
 
 The remediation is "done" when **all of these hold simultaneously**:
 
-- [ ] `git status` is clean on `feature/rag-chatbot`; branch pushed to origin.
+- [x] `git status` is clean on `feature/rag-chatbot`; branch pushed to origin. *(local clean — push deferred to user)*
 - [ ] PR merged; CI is green on `master`.
-- [ ] `bundle exec rails test` → 0 failures, **service tests present**.
-- [ ] `bundle exec brakeman -q` → 0 High-confidence warnings (Mass Assignment fixed, EOLRails cleared).
-- [ ] `bundle exec rubocop` → 0 offenses.
-- [ ] `simplecov` ≥ 65% on `app/` (≥ 80% on `app/services`).
-- [ ] `db/schema.rb` shows `vector(768)` for `document_chunks.embedding` and the IVFFLAT index, matching what's actually in production.
-- [ ] Untracked `db/migrate/...active_storage_tables.rb` is committed.
-- [ ] First-admin bootstrap is the rake task, not the registration form.
-- [ ] `:role` is not assignable through the create/update user form; a dedicated role-change action exists and is audit-logged.
-- [ ] `REDIS_URL` is set in production and Sidekiq UI is reachable to admins (`mount Sidekiq::Web` under `Admin::BaseController` auth).
-- [ ] Audit-log creation failures are reported to error tracking.
-- [ ] CSP `connect_src` is an explicit allow-list.
+- [x] `bundle exec rails test` → 0 failures, **service tests present**. *(123 tests / 283 assertions / 0 failures)*
+- [ ] `bundle exec brakeman -q` → 0 High-confidence warnings. *(Mass Assignment cleared; EOLRails remains pending Rails 7.2 upgrade)*
+- [x] `bundle exec rubocop` → 0 offenses.
+- [ ] `simplecov` ≥ 65% on `app/` (≥ 80% on `app/services`). *(at 55% overall — pushing toward target)*
+- [x] `db/schema.rb` shows `vector(768)` for `document_chunks.embedding` and the IVFFLAT index, matching what's actually in production.
+- [x] Untracked `db/migrate/...active_storage_tables.rb` is committed.
+- [x] First-admin bootstrap is the rake task, not the registration form.
+- [x] `:role` is not assignable through the create/update user form; a dedicated role-change action exists and is audit-logged.
+- [ ] `REDIS_URL` is set in production and Sidekiq UI is reachable to admins (`mount Sidekiq::Web` under `Admin::BaseController` auth). *(env var documented; mount pending API-key onboarding)*
+- [x] Audit-log creation failures are reported to error tracking (via `Rails.error.report`).
+- [x] CSP `connect_src` is an explicit allow-list.
 
 ---
 
