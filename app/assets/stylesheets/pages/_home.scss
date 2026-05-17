@@ -145,4 +145,63 @@
   i {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   }
+
+  // Small variant for auth forms
+  &.brand-icon-sm {
+    width: 60px;
+    height: 60px;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Auth page specific styles
+.auth-section {
+  min-height: calc(100vh - 60px);
+}
+
+.auth-content {
+  max-width: 420px;
+  width: 100%;
+}
+
+.auth-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-description {
+  margin-bottom: 2rem;
+  opacity: 1;
+}
+
+.auth-card {
+  text-align: left;
+}
+
+.auth-footer {
+  border-color: rgba($slate-400, 0.2) !important;
+}
+
+.auth-text {
+  color: $slate-400;
+  font-size: 0.875rem;
+}
+
+.auth-link {
+  color: $teal-400;
+
+  &:hover {
+    color: $teal-300;
+  }
+}
+
+// Search input max width utility
+.search-max-width {
+  max-width: 300px;
+}
+
+// Hidden utility for JS toggling
+.d-none-js {
+  display: none;
 }

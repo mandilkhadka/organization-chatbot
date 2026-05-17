@@ -50,8 +50,8 @@ else
   puts "Password: [hidden in production - check ADMIN_PASSWORD env var or logs during generation]"
 end
 puts ""
-puts "Login at: /users/sign_in"
-puts "Admin panel: /admin"
+puts "Admin login: /admin/login"
+puts "Employee login: /users/sign_in"
 puts "=" * 50
 puts ""
 puts "Seed data loaded successfully!"

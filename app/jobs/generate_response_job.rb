@@ -5,7 +5,7 @@ class GenerateResponseJob < ApplicationJob
   retry_on StandardError, wait: :polynomially_longer, attempts: 3
 
   def perform(message_id, question)
-    message = Message.find_by(id: message_id)
+    message = Message.lock.find_by(id: message_id)
     return if message.nil?
     return if message.status_complete? || message.status_failed?
 

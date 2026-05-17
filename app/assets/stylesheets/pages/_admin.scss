@@ -1,5 +1,83 @@
 // Admin pages styles
 
+// Admin login page
+body.admin-login {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-login-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 420px;
+}
+
+.admin-login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    color: #1a1a2e;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.admin-badge {
+  display: inline-block;
+  background: #e74c3c;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.admin-login-form {
+  .form-control {
+    background: white;
+    border: 1px solid #ddd;
+    color: #333;
+
+    &::placeholder {
+      color: #999;
+    }
+
+    &:focus {
+      background: white;
+      border-color: #1a1a2e;
+      box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
+    }
+  }
+
+  .form-label {
+    color: #333;
+  }
+
+  .btn-primary {
+    background: #1a1a2e;
+    border-color: #1a1a2e;
+
+    &:hover {
+      background: #16213e;
+      border-color: #16213e;
+    }
+  }
+}
+
 // Focus visible styles for accessibility
 .btn,
 .btn-icon,

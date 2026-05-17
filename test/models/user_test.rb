@@ -3,7 +3,7 @@ require "test_helper"
 class UserTest < ActiveSupport::TestCase
   # Test role enum
   test "should have employee role by default" do
-    user = User.new(email: "test@example.com", password: "password123")
+    user = User.new(email: "test@example.com", password: "securepassword123")
     assert user.employee?
     assert_not user.admin?
   end
@@ -68,7 +68,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "should delete admin when other admins exist" do
     # Create a fresh admin for this test to avoid cascade issues
-    new_admin = User.create!(email: "deletable@example.com", password: "password123", role: :admin)
+    new_admin = User.create!(email: "deletable@example.com", password: "securepassword123", role: :admin)
 
     # Ensure at least two admins exist
     assert User.admin.count >= 2
@@ -80,7 +80,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "should delete employee users" do
     # Create a fresh employee for this test to avoid cascade issues
-    new_employee = User.create!(email: "deletable_employee@example.com", password: "password123", role: :employee)
+    new_employee = User.create!(email: "deletable_employee@example.com", password: "securepassword123", role: :employee)
 
     assert_difference "User.count", -1 do
       new_employee.destroy

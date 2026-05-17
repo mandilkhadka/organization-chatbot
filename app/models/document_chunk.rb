@@ -2,22 +2,39 @@ class DocumentChunk < ApplicationRecord
   belongs_to :document
   has_many :message_sources, dependent: :destroy
 
-  begin
-    has_neighbors :embedding if connection.execute("SELECT 1 FROM pg_extension WHERE extname = 'vector'").any?
-  rescue StandardError
-    # Silently continue if pgvector extension is not installed
-  end
-
   validates :content, presence: true
 
   scope :with_embeddings, -> { where.not(embedding: nil) }
 
-  def self.pgvector_enabled?
-    @pgvector_enabled ||= begin
-      connection.execute("SELECT 1 FROM pg_extension WHERE extname = 'vector'").any?
-    rescue StandardError
-      false
+  class << self
+    def pgvector_enabled?
+      return @pgvector_enabled if defined?(@pgvector_enabled)
+
+      @pgvector_enabled = begin
+        connection.execute("SELECT 1 FROM pg_extension WHERE extname = 'vector'").any?
+      rescue StandardError
+        false
+      end
     end
+
+    # Lazily configure has_neighbors only when pgvector is available
+    def configure_neighbors!
+      return if @neighbors_configured
+
+      @neighbors_configured = true
+      has_neighbors :embedding if pgvector_enabled?
+    rescue StandardError
+      # Silently continue if configuration fails
+    end
+  end
+
+  # Configure neighbors on first query
+  after_initialize :ensure_neighbors_configured, if: :new_record?
+
+  private
+
+  def ensure_neighbors_configured
+    self.class.configure_neighbors!
   end
 
   def relevance_score

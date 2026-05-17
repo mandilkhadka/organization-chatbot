@@ -14,7 +14,6 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'a896a17a4da36c530f632f65fe790ae680b48f6552a54d346f4a84ac6b8236013329700379414376c0acfc616801e3bc87a4073a971f5003457aade1a9e6938e'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -90,7 +89,8 @@ Devise.setup do |config|
   # It will change confirmation, password recovery and other workflows
   # to behave the same regardless if the e-mail provided was right or wrong.
   # Does not affect registerable.
-  # config.paranoid = true
+  # SECURITY: Prevents user enumeration via password reset and other flows
+  config.paranoid = true
 
   # By default Devise will store the user in session. You can skip storage for
   # particular strategies by setting this option.
@@ -126,7 +126,10 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 12
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '952e70eb7cb4a79c49014fb8a680d773365f6d003fb0fa5070d0d817ade435b4b2802f93f60b7f4a4201f9ef5fc102059846064f22f0533e8488149adc44595a'
+  # SECURITY: Pepper adds application-level secret to password hashing.
+  # If database is breached, passwords remain protected by the pepper.
+  # Generate with: rails secret
+  config.pepper = ENV.fetch('DEVISE_PEPPER', nil)
 
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
@@ -174,7 +177,12 @@ Devise.setup do |config|
 
   # Options to be passed to the created cookie. For instance, you can set
   # secure: true in order to force SSL only cookies.
-  # config.rememberable_options = {}
+  # SECURITY: Secure cookie settings for remember-me functionality
+  config.rememberable_options = {
+    secure: Rails.env.production?,
+    httponly: true,
+    same_site: :lax
+  }
 
   # ==> Configuration for :validatable
   # Range for password length.
@@ -189,7 +197,8 @@ Devise.setup do |config|
   # ==> Configuration for :timeoutable
   # The time you want to timeout the user session without activity. After this
   # time the user will be asked for credentials again. Default is 30 minutes.
-  # config.timeout_in = 30.minutes
+  # SECURITY: Sessions timeout after 30 minutes of inactivity
+  config.timeout_in = 30.minutes
 
   # ==> Configuration for :lockable
   # Defines which strategy will be used to lock an account.

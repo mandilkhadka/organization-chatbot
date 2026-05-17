@@ -16,6 +16,13 @@ export default class extends Controller {
     "errorList",
   ];
 
+  // Escape HTML to prevent XSS attacks
+  escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   filesSelected() {
     const files = this.filesTarget.files;
 
@@ -43,10 +50,19 @@ export default class extends Controller {
       const sizeClass =
         file.size > 10 * 1024 * 1024 ? "text-danger" : "text-muted";
 
-      li.innerHTML = `
-        <span><i class="fas fa-file me-2"></i>${file.name}</span>
-        <span class="badge ${sizeClass}">${sizeInMB} MB</span>
-      `;
+      // Build DOM elements safely to prevent XSS
+      const nameSpan = document.createElement("span");
+      const icon = document.createElement("i");
+      icon.className = "fas fa-file me-2";
+      nameSpan.appendChild(icon);
+      nameSpan.appendChild(document.createTextNode(file.name));
+
+      const sizeSpan = document.createElement("span");
+      sizeSpan.className = `badge ${sizeClass}`;
+      sizeSpan.textContent = `${sizeInMB} MB`;
+
+      li.appendChild(nameSpan);
+      li.appendChild(sizeSpan);
       this.fileListItemsTarget.appendChild(li);
     }
 
@@ -82,14 +98,22 @@ export default class extends Controller {
     this.resultsTarget.style.display = "none";
 
     try {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]');
+      if (!csrfToken) {
+        throw new Error("CSRF token not found");
+      }
+
       const response = await fetch("/admin/documents/bulk_create", {
         method: "POST",
         headers: {
-          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]')
-            .content,
+          "X-CSRF-Token": csrfToken.content,
         },
         body: formData,
       });
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
 
       const result = await response.json();
 
@@ -98,18 +122,24 @@ export default class extends Controller {
 
       if (result.successful && result.successful.length > 0) {
         this.successAlertTarget.style.display = "block";
-        this.successListTarget.innerHTML = result.successful
-          .map((doc) => `<li>${doc.title}</li>`)
-          .join("");
+        this.successListTarget.innerHTML = "";
+        result.successful.forEach((doc) => {
+          const li = document.createElement("li");
+          li.textContent = doc.title;
+          this.successListTarget.appendChild(li);
+        });
       } else {
         this.successAlertTarget.style.display = "none";
       }
 
       if (result.failed && result.failed.length > 0) {
         this.errorAlertTarget.style.display = "block";
-        this.errorListTarget.innerHTML = result.failed
-          .map((doc) => `<li>${doc.filename}: ${doc.error}</li>`)
-          .join("");
+        this.errorListTarget.innerHTML = "";
+        result.failed.forEach((doc) => {
+          const li = document.createElement("li");
+          li.textContent = `${doc.filename}: ${doc.error}`;
+          this.errorListTarget.appendChild(li);
+        });
       } else {
         this.errorAlertTarget.style.display = "none";
       }
@@ -126,7 +156,10 @@ export default class extends Controller {
       this.progressTarget.style.display = "none";
       this.resultsTarget.style.display = "block";
       this.errorAlertTarget.style.display = "block";
-      this.errorListTarget.innerHTML = `<li>Upload failed: ${error.message}</li>`;
+      this.errorListTarget.innerHTML = "";
+      const li = document.createElement("li");
+      li.textContent = `Upload failed: ${error.message}`;
+      this.errorListTarget.appendChild(li);
       this.uploadBtnTarget.disabled = false;
     }
   }

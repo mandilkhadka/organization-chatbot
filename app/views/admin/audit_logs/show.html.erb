@@ -36,7 +36,7 @@
         <% if @audit_log.change_data.present? %>
           <dt class="col-sm-3">Changes</dt>
           <dd class="col-sm-9">
-            <pre class="bg-light p-3 rounded"><%= JSON.pretty_generate(@audit_log.change_data) %></pre>
+            <pre class="bg-light p-3 rounded"><%= h(JSON.pretty_generate(@audit_log.change_data)) %></pre>
           </dd>
         <% end %>
       </dl>

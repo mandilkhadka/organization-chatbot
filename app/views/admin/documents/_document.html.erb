@@ -21,7 +21,7 @@
     <% when "ready" %>
       <span class="badge-status-completed">Ready</span>
     <% when "failed" %>
-      <span class="badge-status-failed" title="<%= document.error_message %>">Failed</span>
+      <span class="badge-status-failed" title="<%= h(document.error_message) %>">Failed</span>
     <% end %>
   </td>
   <td>

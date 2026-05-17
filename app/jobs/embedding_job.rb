@@ -3,7 +3,8 @@ class EmbeddingJob < ApplicationJob
   retry_on StandardError, wait: :polynomially_longer, attempts: 3
 
   def perform(document_chunk_id)
-    chunk = DocumentChunk.find(document_chunk_id)
+    chunk = DocumentChunk.find_by(id: document_chunk_id)
+    return if chunk.nil?
     return if chunk.embedding.present?
 
     embedding_service = EmbeddingService.new
@@ -18,7 +19,8 @@ class EmbeddingJob < ApplicationJob
 
     # Check if all chunks are embedded and mark document as ready
     document = chunk.document
-    if document.document_chunks.where(embedding: nil).empty?
+    # Use count query instead of where(embedding: nil) for better pgvector compatibility
+    if document.document_chunks.where("embedding IS NULL").count.zero?
       document.ready!
       Rails.logger.info("Document #{document.id} is ready with all embeddings generated")
     end

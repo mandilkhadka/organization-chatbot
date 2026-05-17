@@ -107,25 +107,25 @@
           <div class="form-text">Supported: PDF, DOCX, TXT (max 10MB each)</div>
         </div>
 
-        <div data-bulk-upload-target="fileList" class="mb-3" style="display: none;">
+        <div data-bulk-upload-target="fileList" class="mb-3 d-none">
           <label class="form-label">Selected Files:</label>
           <ul class="list-group" data-bulk-upload-target="fileListItems"></ul>
         </div>
 
-        <div data-bulk-upload-target="results" class="mb-3" style="display: none;">
-          <div class="alert alert-success" data-bulk-upload-target="successAlert" style="display: none;">
+        <div data-bulk-upload-target="results" class="mb-3 d-none">
+          <div class="alert alert-success d-none" data-bulk-upload-target="successAlert">
             <strong>Successful uploads:</strong>
             <ul data-bulk-upload-target="successList" class="mb-0"></ul>
           </div>
-          <div class="alert alert-danger" data-bulk-upload-target="errorAlert" style="display: none;">
+          <div class="alert alert-danger d-none" data-bulk-upload-target="errorAlert">
             <strong>Failed uploads:</strong>
             <ul data-bulk-upload-target="errorList" class="mb-0"></ul>
           </div>
         </div>
 
-        <div data-bulk-upload-target="progress" class="mb-3" style="display: none;">
+        <div data-bulk-upload-target="progress" class="mb-3 d-none">
           <div class="progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-animated w-100" role="progressbar"></div>
           </div>
           <p class="text-center mt-2 text-muted">Uploading documents...</p>
         </div>

@@ -1,8 +1,9 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :timeoutable, :trackable and :omniauthable
+  # :confirmable, :trackable and :omniauthable
+  # SECURITY: Added :timeoutable for automatic session expiration
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :lockable
+         :recoverable, :rememberable, :validatable, :lockable, :timeoutable
 
   enum role: { employee: 0, admin: 1 }
 

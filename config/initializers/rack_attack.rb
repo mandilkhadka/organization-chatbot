@@ -14,6 +14,18 @@ class Rack::Attack
     end
   end
 
+  # Throttle user login attempts by IP address (Devise)
+  throttle("user_login/ip", limit: 5, period: 20.seconds) do |req|
+    req.ip if req.path == "/users/sign_in" && req.post?
+  end
+
+  # Throttle user login attempts by email (Devise)
+  throttle("user_login/email", limit: 5, period: 5.minutes) do |req|
+    if req.path == "/users/sign_in" && req.post?
+      req.params.dig("user", "email").to_s.downcase.gsub(/\s+/, "").presence
+    end
+  end
+
   # Throttle password reset requests
   throttle("password_reset/ip", limit: 3, period: 5.minutes) do |req|
     req.ip if req.path == "/users/password" && req.post?

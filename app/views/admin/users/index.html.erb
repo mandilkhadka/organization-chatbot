@@ -12,7 +12,7 @@
   <!-- Search and Filter -->
   <div class="admin-filters mb-4">
     <%= form_with url: admin_users_path, method: :get, local: true, class: "d-flex gap-3 flex-wrap" do %>
-      <div class="flex-grow-1" style="max-width: 300px;">
+      <div class="flex-grow-1 search-max-width">
         <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Search by email..." %>
       </div>
       <div>

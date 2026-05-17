@@ -12,7 +12,7 @@ module Admin
 
       @recent_users = User.order(created_at: :desc).limit(5)
       @recent_documents = Document.includes(:user).order(created_at: :desc).limit(5)
-      @recent_conversations = Conversation.includes(:user, :messages).order(updated_at: :desc).limit(5)
+      @recent_conversations = Conversation.includes(:user).order(updated_at: :desc).limit(5)
     end
   end
 end

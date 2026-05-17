@@ -52,10 +52,16 @@ module Auditable
     end
   end
 
+  SENSITIVE_FIELDS = %w[
+    updated_at created_at encrypted_password
+    reset_password_token reset_password_sent_at
+    unlock_token locked_at remember_created_at
+  ].freeze
+
   def extract_changes
     return {} unless @audited_resource.respond_to?(:previous_changes)
 
-    @audited_resource.previous_changes.except("updated_at", "created_at")
+    @audited_resource.previous_changes.except(*SENSITIVE_FIELDS)
   end
 
   def audit_resource(resource)

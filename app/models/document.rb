@@ -17,6 +17,7 @@ class Document < ApplicationRecord
   ].freeze
 
   validate :acceptable_file_type, on: :create
+  validate :acceptable_file_size, on: :create
 
   after_create_commit :process_document
 
@@ -28,6 +29,14 @@ class Document < ApplicationRecord
     return if SUPPORTED_CONTENT_TYPES.include?(file.content_type)
 
     errors.add(:file, "must be a PDF, DOCX, or TXT file")
+  end
+
+  def acceptable_file_size
+    return unless file.attached?
+
+    if file.byte_size > 10.megabytes
+      errors.add(:file, "is too large (maximum is 10 MB)")
+    end
   end
 
   def process_document

@@ -22,12 +22,24 @@ class VectorSearchService
   private
 
   def search_with_pgvector(query_embedding, limit, threshold)
-    DocumentChunk
+    max_distance = 1 - threshold
+
+    # Configure neighbors before searching
+    DocumentChunk.configure_neighbors!
+
+    # Fetch more results than needed to account for threshold filtering
+    # neighbor_distance is computed dynamically, so we filter in Ruby after fetching
+    results = DocumentChunk
       .with_embeddings
       .includes(:document)
       .nearest_neighbors(:embedding, query_embedding, distance: "cosine")
-      .limit(limit)
-      .select { |chunk| chunk.neighbor_distance <= (1 - threshold) }
+      .limit(limit * 3)
+      .to_a
+
+    # Apply threshold filter and take the requested limit
+    results
+      .select { |chunk| chunk.neighbor_distance <= max_distance }
+      .take(limit)
   end
 
   def search_with_ruby(query_embedding, limit, threshold)

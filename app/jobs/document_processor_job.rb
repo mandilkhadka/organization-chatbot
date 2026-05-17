@@ -3,7 +3,7 @@ class DocumentProcessorJob < ApplicationJob
   retry_on StandardError, wait: :polynomially_longer, attempts: 3
 
   def perform(document_id)
-    document = Document.find(document_id)
+    document = Document.lock.find(document_id)
     return if document.ready? || document.processing?
 
     document.processing!

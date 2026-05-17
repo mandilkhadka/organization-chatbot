@@ -1,5 +1,7 @@
 module Admin
   class UsersController < Admin::BaseController
+    include Auditable
+
     before_action :set_user, only: %i[show edit update destroy toggle_status]
     rescue_from ActiveRecord::RecordNotFound, with: :user_not_found
 
@@ -28,6 +30,7 @@ module Admin
       @user = User.new(user_params)
 
       if @user.save
+        audit_resource(@user)
         redirect_to admin_users_path, notice: "Employee account created successfully. Credentials: #{@user.email}"
       else
         render :new, status: :unprocessable_entity
@@ -43,6 +46,7 @@ module Admin
       update_params.delete(:password_confirmation) if update_params[:password_confirmation].blank?
 
       if @user.update(update_params)
+        audit_resource(@user)
         redirect_to admin_users_path, notice: "User updated successfully."
       else
         render :edit, status: :unprocessable_entity
@@ -61,6 +65,7 @@ module Admin
       end
 
       @user.destroy
+      audit_resource(@user)
       respond_to do |format|
         format.html { redirect_to admin_users_path, notice: "User deleted successfully." }
         format.turbo_stream
