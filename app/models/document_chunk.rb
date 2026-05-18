@@ -1,5 +1,5 @@
 class DocumentChunk < ApplicationRecord
-  belongs_to :document
+  belongs_to :document, counter_cache: true
   has_many :message_sources, dependent: :destroy
 
   validates :content, presence: true

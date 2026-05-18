@@ -70,7 +70,12 @@ group :development do
   # Code quality and security
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-minitest", require: false
   gem "brakeman", require: false
+
+  # Catch N+1 queries before they reach production
+  gem "bullet"
 end
 
 group :test do
@@ -83,6 +88,9 @@ group :test do
 
   # HTTP stubbing for service tests (Gemini API etc.)
   gem "webmock"
+
+  # Object factories for non-trivial test scenarios
+  gem "factory_bot_rails"
 end
 
 gem 'ollama-ai', '~> 1.3.0'
@@ -99,3 +107,12 @@ gem "docx"                 # DOCX parsing
 gem "neighbor"             # pgvector ActiveRecord integration
 gem "sidekiq"              # Background jobs
 gem "rack-attack"          # Rate limiting and throttling
+
+# Caching, queueing, and Action Cable shared backend
+gem "redis", ">= 4.0.1"
+
+# Observability
+gem "lograge"              # Single-line structured request logs
+gem "sentry-ruby"          # Error reporting
+gem "sentry-rails"         # Rails integration (request_id, breadcrumbs)
+gem "sentry-sidekiq"       # Job-level exception capture

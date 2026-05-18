@@ -6,7 +6,7 @@ class MessagesController < ApplicationController
     # Validate content
     content = message_params[:content]&.strip
     if content.blank?
-      head :unprocessable_entity
+      head :unprocessable_content
       return
     end
 
@@ -40,7 +40,7 @@ class MessagesController < ApplicationController
     @message = @conversation.messages.find(params[:id])
     feedback_value = params[:feedback]
 
-    unless Message.feedbacks.keys.include?(feedback_value)
+    unless Message.feedbacks.key?(feedback_value)
       head :bad_request
       return
     end

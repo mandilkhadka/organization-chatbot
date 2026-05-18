@@ -11,6 +11,7 @@ class VectorSearchServiceTest < ActiveSupport::TestCase
   test "returns empty array when embedding generation fails" do
     @embedding_service.expect(:generate, nil) { raise StandardError, "API error" }
     result = @service.search("anything")
+
     assert_equal [], result
   end
 
@@ -33,7 +34,7 @@ class VectorSearchServiceTest < ActiveSupport::TestCase
       result = @service.search("query", limit: 5, threshold: 0.5)
 
       assert_includes result, relevant
-      refute_includes result, irrelevant
+      assert_not_includes result, irrelevant
     end
   end
 
@@ -49,6 +50,7 @@ class VectorSearchServiceTest < ActiveSupport::TestCase
 
       @embedding_service.expect(:generate, vec, ["query"])
       result = @service.search("query", limit: 2, threshold: 0.5)
+
       assert_equal 2, result.length
     end
   end
@@ -68,8 +70,9 @@ class VectorSearchServiceTest < ActiveSupport::TestCase
       @embedding_service.expect(:generate, similar_vec, ["query"])
       # 0.9 threshold rejects the negatively-correlated vector.
       result = @service.search("query", limit: 5, threshold: 0.9)
+
       assert_includes result, similar
-      refute_includes result, dissimilar
+      assert_not_includes result, dissimilar
     end
   end
 end

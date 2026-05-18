@@ -23,6 +23,7 @@ require_relative "../config/environment"
 require "rails/test_help"
 require "minitest/mock"
 require "webmock/minitest"
+require "factory_bot_rails"
 
 # Block any unstubbed outbound HTTP. Tests must stub Gemini etc.
 WebMock.disable_net_connect!(allow_localhost: true)
@@ -45,6 +46,7 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
-    # Add more helper methods to be used by all tests here...
+    # FactoryBot syntax: `create(:user)` instead of `FactoryBot.create(:user)`.
+    include FactoryBot::Syntax::Methods
   end
 end

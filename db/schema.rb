@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_05_17_160000) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_18_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -100,6 +100,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_05_17_160000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "category_id"
+    t.integer "document_chunks_count", default: 0, null: false
     t.index ["category_id"], name: "index_documents_on_category_id"
     t.index ["status"], name: "index_documents_on_status"
     t.index ["user_id"], name: "index_documents_on_user_id"

@@ -1,81 +1,23 @@
 // Admin pages styles
+//
+// NOTE: The admin login page intentionally reuses the auth-section /
+// auth-card pattern defined alongside Devise. The previous light-themed
+// card-on-indigo-gradient was a visual outlier — having two design
+// systems in one app is a major "AI built" tell.
 
-// Admin login page
-body.admin-login {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.admin-login-container {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 3rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  width: 100%;
-  max-width: 420px;
-}
-
-.admin-login-header {
-  text-align: center;
-  margin-bottom: 2rem;
-
-  h1 {
-    color: #1a1a2e;
-    font-size: 1.75rem;
-    margin-bottom: 0.5rem;
-  }
-
-  p {
-    color: #666;
-    font-size: 0.9rem;
-  }
-}
-
-.admin-badge {
+// Small pill used above the admin auth heading.
+.auth-pill {
   display: inline-block;
-  background: #e74c3c;
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
+  padding: 0.25rem 0.85rem;
   margin-bottom: 1rem;
-}
-
-.admin-login-form {
-  .form-control {
-    background: white;
-    border: 1px solid #ddd;
-    color: #333;
-
-    &::placeholder {
-      color: #999;
-    }
-
-    &:focus {
-      background: white;
-      border-color: #1a1a2e;
-      box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
-    }
-  }
-
-  .form-label {
-    color: #333;
-  }
-
-  .btn-primary {
-    background: #1a1a2e;
-    border-color: #1a1a2e;
-
-    &:hover {
-      background: #16213e;
-      border-color: #16213e;
-    }
-  }
+  border: 1px solid rgba($teal-400, 0.35);
+  border-radius: 999px;
+  background: rgba($teal-500, 0.08);
+  color: $teal-300;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 // Focus visible styles for accessibility

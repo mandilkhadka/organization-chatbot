@@ -26,6 +26,9 @@ module Admin
       @user = User.new
     end
 
+    def edit
+    end
+
     def create
       # SECURITY: role is NOT mass-assignable. New users default to :employee.
       # Promotion to admin must go through update_role (audited).
@@ -35,11 +38,8 @@ module Admin
         audit_resource(@user)
         redirect_to admin_users_path, notice: "Employee account created successfully. Credentials: #{@user.email}"
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
-    end
-
-    def edit
     end
 
     def update
@@ -51,7 +51,7 @@ module Admin
         audit_resource(@user)
         redirect_to admin_users_path, notice: "User updated successfully."
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

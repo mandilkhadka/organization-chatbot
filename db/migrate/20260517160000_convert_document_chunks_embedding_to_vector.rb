@@ -9,7 +9,11 @@ class ConvertDocumentChunksEmbeddingToVector < ActiveRecord::Migration[7.1]
     # are generated. If you have embeddings stored as JSON text and need
     # to preserve them, add a one-off backfill script before running.
     if column_exists?(:document_chunks, :embedding)
-      remove_index :document_chunks, :embedding rescue nil
+      begin
+        remove_index :document_chunks, :embedding
+      rescue StandardError
+        nil
+      end
       remove_column :document_chunks, :embedding
     end
 
@@ -21,7 +25,11 @@ class ConvertDocumentChunksEmbeddingToVector < ActiveRecord::Migration[7.1]
     return unless extension_enabled?("vector")
     return unless column_already_vector?
 
-    remove_index :document_chunks, :embedding rescue nil
+    begin
+      remove_index :document_chunks, :embedding
+    rescue StandardError
+      nil
+    end
     remove_column :document_chunks, :embedding
     add_column :document_chunks, :embedding, :text
   end
@@ -35,7 +43,7 @@ class ConvertDocumentChunksEmbeddingToVector < ActiveRecord::Migration[7.1]
   end
 
   def column_already_vector?
-    result = execute(<<~SQL).to_a
+    result = execute(<<~SQL.squish).to_a
       SELECT udt_name
       FROM information_schema.columns
       WHERE table_name = 'document_chunks' AND column_name = 'embedding'

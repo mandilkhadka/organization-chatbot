@@ -123,9 +123,12 @@
         </div>
         <div class="card-body p-0">
           <% if @recent_users.empty? %>
-            <div class="admin-empty-state py-4">
-              <p class="mb-0">No users yet.</p>
-            </div>
+            <%= render "shared/empty_state",
+                       size: :sm,
+                       icon: "user-plus",
+                       title: "No employees yet",
+                       body: "Invite your first teammate so they can sign in and start asking the knowledge base.",
+                       cta: { label: "Add employee", path: new_admin_user_path, icon: "plus" } %>
           <% else %>
             <div class="recent-list">
               <% @recent_users.each do |user| %>
@@ -163,9 +166,12 @@
         </div>
         <div class="card-body p-0">
           <% if @recent_documents.empty? %>
-            <div class="admin-empty-state py-4">
-              <p class="mb-0">No documents yet.</p>
-            </div>
+            <%= render "shared/empty_state",
+                       size: :sm,
+                       icon: "file-arrow-up",
+                       title: "No documents yet",
+                       body: "Drop in a PDF, DOCX, or TXT — we'll chunk and embed it so the chatbot can cite it.",
+                       cta: { label: "Upload document", path: new_admin_document_path, icon: "upload" } %>
           <% else %>
             <div class="recent-list">
               <% @recent_documents.each do |doc| %>

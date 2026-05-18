@@ -26,8 +26,8 @@ Rails.application.configure do
 
   # SECURITY: Generate unique nonce per request using SecureRandom (not session ID)
   # Session-based nonces are predictable and can be exploited if session ID is leaked
-  config.content_security_policy_nonce_generator = ->(request) { SecureRandom.base64(16) }
-  config.content_security_policy_nonce_directives = %w(script-src style-src)
+  config.content_security_policy_nonce_generator = ->(_request) { SecureRandom.base64(16) }
+  config.content_security_policy_nonce_directives = %w[script-src style-src]
 
   # Report violations without enforcing the policy (useful for testing).
   # config.content_security_policy_report_only = true

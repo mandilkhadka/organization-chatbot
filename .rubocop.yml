@@ -1,46 +1,124 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+  - rubocop-minitest
+
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 3.3
+  TargetRailsVersion: 7.1
   Exclude:
     - "bin/**/*"
-    - "db/**/*"
-    - "config/**/*"
+    - "db/schema.rb"
+    - "db/migrate/*active_storage*"
     - "node_modules/**/*"
-    - "script/**/*"
-    - "support/**/*"
     - "tmp/**/*"
-    - "test/**/*"
+    - "vendor/**/*"
+    - "config/initializers/sentry.rb" # Uses top-level scrub_params helper
 
-Style/ConditionalAssignment:
-  Enabled: false
+# --- Style relaxations: matters of taste, not bugs.
 Style/StringLiterals:
-  Enabled: false
-Style/RedundantReturn:
   Enabled: false
 Style/Documentation:
   Enabled: false
-Style/WordArray:
-  Enabled: false
-Metrics/AbcSize:
+Style/FrozenStringLiteralComment:
   Enabled: false
 Style/MutableConstant:
   Enabled: false
+Style/RedundantReturn:
+  Enabled: false
+Style/WordArray:
+  Enabled: false
+Style/ConditionalAssignment:
+  Enabled: false
 Style/SignalException:
-  Enabled: false
-Metrics/CyclomaticComplexity:
-  Enabled: false
-Metrics/MethodLength:
-  Enabled: false
-Metrics/PerceivedComplexity:
   Enabled: false
 Style/MissingRespondToMissing:
   Enabled: false
-Lint/MissingSuper:
-  Enabled: false
-Style/FrozenStringLiteralComment:
-  Enabled: false
-Layout/LineLength:
-  Max: 120
 Style/EmptyMethod:
   Enabled: false
 Bundler/OrderedGems:
   Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+
+# --- Metrics: kept on but with realistic thresholds. A senior reviewer
+# would call out methods over 25 lines or AbcSize > 25 as smells worth a
+# look — not as automatic blocks. Long view spec files and migrations are
+# excluded because they're inherently long.
+Metrics/AbcSize:
+  Max: 50
+  Exclude:
+    - "test/**/*"
+    - "db/migrate/*"
+Metrics/MethodLength:
+  Max: 35
+  Exclude:
+    - "test/**/*"
+    - "db/migrate/*"
+    - "config/initializers/**/*"
+Metrics/ClassLength:
+  Max: 200
+  Exclude:
+    - "test/**/*"
+Metrics/CyclomaticComplexity:
+  Max: 12
+Metrics/PerceivedComplexity:
+  Max: 12
+Metrics/BlockLength:
+  Exclude:
+    - "config/**/*"
+    - "test/**/*"
+    - "db/seeds.rb"
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - "config/initializers/**/*"
+    - "test/**/*"
+
+# BulkChangeTable would optimize migrations that have already shipped.
+# Rewriting committed migrations to satisfy a style cop is churn for no
+# operational benefit.
+Rails/BulkChangeTable:
+  Exclude:
+    - "db/migrate/**/*"
+
+# --- Rails cops that catch real bugs.
+Rails/SkipsModelValidations:
+  Enabled: true
+  Exclude:
+    - "test/**/*"           # test setup deliberately skips validations
+    - "db/migrate/**/*"     # backfills bypass validations on purpose
+Rails/OutputSafety:
+  Enabled: true
+Rails/TimeZone:
+  Enabled: true
+
+# Disabled: every controller flash/redirect message would need an i18n key.
+# The PRD already calls out full i18n as a separate workstream — turning
+# this on now would generate hundreds of fake "fix" commits. Re-enable
+# when `ja.yml` and `en.yml` are populated.
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+# HealthController intentionally inherits from ActionController::Base to
+# skip Devise auth, CSRF tokens, and flash — health probes must be public.
+Rails/ApplicationController:
+  Exclude:
+    - "app/controllers/health_controller.rb"
+
+# Devise's RegistrationsController defines new/create in its parent class.
+# Our subclass adds extra filters on those actions, which this cop misreads.
+Rails/LexicallyScopedActionFilter:
+  Exclude:
+    - "app/controllers/users/registrations_controller.rb"
+
+# Test-only relaxations.
+Style/OpenStructUse:
+  Exclude:
+    - "test/**/*"           # service tests stub blobs with OpenStruct
+
+# --- Test cops — Minitest plugin defaults are fine; just keep noise down.
+Minitest/MultipleAssertions:
+  Max: 8

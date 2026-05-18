@@ -63,6 +63,16 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  // Transition props mirror the one in flash_controller.js#close.
+  // Update both or neither.
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+
+  &.is-leaving {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
 
   &.flash-notice {
     border-left: 3px solid $emerald-400;
@@ -77,6 +87,22 @@
 
     .flash-icon {
       color: $rose-500;
+    }
+  }
+
+  &.flash-warning {
+    border-left: 3px solid $amber-400;
+
+    .flash-icon {
+      color: $amber-400;
+    }
+  }
+
+  &.flash-info {
+    border-left: 3px solid $cyan-400;
+
+    .flash-icon {
+      color: $cyan-400;
     }
   }
 
@@ -100,6 +126,18 @@
 
     &:hover {
       color: $slate-300;
+    }
+  }
+}
+
+// Respect users who've asked for reduced motion: skip the slide and fade.
+@media (prefers-reduced-motion: reduce) {
+  .flash-notification {
+    animation: none;
+    transition: opacity 0.15s linear;
+
+    &.is-leaving {
+      transform: none;
     }
   }
 }

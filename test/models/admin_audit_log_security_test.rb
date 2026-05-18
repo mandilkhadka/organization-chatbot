@@ -11,7 +11,7 @@ class AdminAuditLogSecurityTest < ActiveSupport::TestCase
     log = AdminAuditLog.create!(
       user: @admin,
       action: "create",
-      resource_type: "Kernel",  # Dangerous class - not whitelisted
+      resource_type: "Kernel", # Dangerous class - not whitelisted
       resource_id: 1
     )
 
@@ -21,13 +21,13 @@ class AdminAuditLogSecurityTest < ActiveSupport::TestCase
 
   test "whitelisted resource types can be resolved" do
     AdminAuditLog::ALLOWED_RESOURCE_TYPES.each do |type|
-      next if type == "System"  # System has no ID
+      next if type == "System" # System has no ID
 
       log = AdminAuditLog.new(
         user: @admin,
         action: "create",
         resource_type: type,
-        resource_id: 999  # Non-existent ID
+        resource_id: 999 # Non-existent ID
       )
 
       # Should not raise, should return nil for non-existent record
@@ -47,6 +47,7 @@ class AdminAuditLogSecurityTest < ActiveSupport::TestCase
 
   test "ALLOWED_RESOURCE_TYPES includes expected types" do
     expected_types = %w[Document Category User System]
+
     expected_types.each do |type|
       assert_includes AdminAuditLog::ALLOWED_RESOURCE_TYPES, type
     end
@@ -64,7 +65,7 @@ class AdminAuditLogSecurityTest < ActiveSupport::TestCase
       request: mock_request
     )
 
-    assert log.user_agent.length <= 500
+    assert_operator log.user_agent.length, :<=, 500
     mock_request.verify
   end
 end

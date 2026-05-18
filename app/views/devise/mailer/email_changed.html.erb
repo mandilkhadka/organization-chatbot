@@ -1,7 +1,25 @@
-<p>Hello <%= @email %>!</p>
+<% content_for :title, "Email address updated" %>
+
+<h1 style="margin:0 0 16px; font-size:22px; font-weight:600; color:#0f172a; letter-spacing:-0.01em;">
+  Email address updated
+</h1>
+
+<p style="margin:0 0 16px; color:#334155; font-size:15px;">
+  Hi <%= @email %>,
+</p>
 
 <% if @resource.try(:unconfirmed_email?) %>
-  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+  <p style="margin:0 0 16px; color:#334155; font-size:15px;">
+    The email on your Knowledge Assistant account is being changed to
+    <strong><%= @resource.unconfirmed_email %></strong>. We've sent a confirmation message to that address.
+  </p>
 <% else %>
-  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+  <p style="margin:0 0 16px; color:#334155; font-size:15px;">
+    The email on your Knowledge Assistant account has been changed to
+    <strong><%= @resource.email %></strong>.
+  </p>
 <% end %>
+
+<p style="margin:24px 0 0; color:#64748b; font-size:13px;">
+  If this wasn't you, reset your password immediately and contact your administrator.
+</p>

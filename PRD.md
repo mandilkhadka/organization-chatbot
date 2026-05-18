@@ -224,15 +224,25 @@ The remediation is "done" when **all of these hold simultaneously**:
 - [ ] PR merged; CI is green on `master`.
 - [x] `bundle exec rails test` → 0 failures, **service tests present**. *(123 tests / 283 assertions / 0 failures)*
 - [ ] `bundle exec brakeman -q` → 0 High-confidence warnings. *(Mass Assignment cleared; EOLRails remains pending Rails 7.2 upgrade)*
-- [x] `bundle exec rubocop` → 0 offenses.
-- [ ] `simplecov` ≥ 65% on `app/` (≥ 80% on `app/services`). *(at 55% overall — pushing toward target)*
+- [x] `bundle exec rubocop` → 0 offenses *(with `rubocop-performance` and `rubocop-minitest` plugins, Metrics cops re-enabled at sensible thresholds)*.
+- [ ] `simplecov` ≥ 65% on `app/` (≥ 80% on `app/services`). *(at 47% — biggest gap is controllers and the streaming chat path; factory_bot now available to make request specs writable)*
 - [x] `db/schema.rb` shows `vector(768)` for `document_chunks.embedding` and the IVFFLAT index, matching what's actually in production.
 - [x] Untracked `db/migrate/...active_storage_tables.rb` is committed.
 - [x] First-admin bootstrap is the rake task, not the registration form.
 - [x] `:role` is not assignable through the create/update user form; a dedicated role-change action exists and is audit-logged.
-- [ ] `REDIS_URL` is set in production and Sidekiq UI is reachable to admins (`mount Sidekiq::Web` under `Admin::BaseController` auth). *(env var documented; mount pending API-key onboarding)*
+- [x] `REDIS_URL` is wired through `config.cache_store`, Sidekiq, and Rack::Attack. **Sidekiq Web** mounted at `/admin/sidekiq` behind a Warden admin constraint. `config/sidekiq.yml` defines weighted queues and a 6-month dead-set window.
 - [x] Audit-log creation failures are reported to error tracking (via `Rails.error.report`).
 - [x] CSP `connect_src` is an explicit allow-list.
+- [x] **Observability**: Sentry (PII-scrubbed via `before_send`) + lograge (JSON, request_id-tagged).
+- [x] **Health endpoints**: `/up` & `/health` (liveness), `/health/deep` (Postgres + Redis readiness, optional Gemini probe).
+- [x] **DNS rebinding protection**: `config.hosts` driven by `APP_HOST` + `ADDITIONAL_HOSTS`; health paths exempted.
+- [x] **SMTP**: Production mailer wired with `SMTP_*` env vars; password reset will no longer silently fail.
+- [x] **Mailer branding**: All Devise templates carry a custom layout, branded header, and plaintext siblings.
+- [x] **Frontend unification**: Admin login no longer a light-theme outlier; now uses the same dark slate/teal `auth-card` pattern as Devise sessions.
+- [x] **Empty states**: `shared/_empty_state.html.erb` partial replaces the one-line `<p>No X yet</p>` placeholders across dashboard, documents, users, categories.
+- [x] **Flash component**: Multi-flash support (notice/alert/info/warning/success/error), auto-dismiss with hover-pause via `flash_controller.js`, reduced-motion respected.
+- [x] **N+1 fix**: `document_chunks_count` counter cache replaces inline `document_chunks.count` in the documents table.
+- [x] **N+1 detection**: Bullet integrated in dev/test (currently warn-only — flip to `raise` once existing N+1s in dashboard are audited).
 
 ---
 
@@ -261,3 +271,44 @@ Tests: **101 passing**. Brakeman: **2** (1 EOLRails High, 1 Mass Assignment Medi
 ---
 
 *This PRD supersedes ad-hoc notes in `AUDIT-REPORT.md` and `SECURITY-FIXES.md`. Update this file as items are closed; do not start a new audit document.*
+
+---
+
+## 9. Changelog
+
+### 2026-05-18 — Production hardening + frontend polish
+
+**Infrastructure**
+
+- Added `sentry-ruby` / `sentry-rails` / `sentry-sidekiq` with a PII-scrubbing `before_send` hook (`config/initializers/sentry.rb`). DSN-gated — silent unless `SENTRY_DSN` set.
+- Added `lograge` (`config/initializers/lograge.rb`) emitting one JSON log line per request with `request_id`, `user_id`, sanitized params, exception class/message.
+- Added `redis` gem and configured `config.cache_store = :redis_cache_store` in production with timeouts, retry, and a Sentry-hooked error handler. **Closes the prior silent-throttle bug where Rack::Attack inherited NullStore.**
+- Added `config/sidekiq.yml` (weighted queues — `embeddings:4, documents:3, responses:3, default:2, mailers:1`; 6-month dead-set retention) and `config/initializers/sidekiq.rb` (REDIS_URL-driven pool sizing, dead-job logging).
+- Mounted `Sidekiq::Web` at `/admin/sidekiq` behind a Warden route-level constraint that requires `admin? && !admin_session_expired?`.
+- Set `config.active_job.queue_adapter = :sidekiq` in production.
+- Configured SMTP (`SMTP_ADDRESS`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_AUTHENTICATION`, `SMTP_DOMAIN`, `MAILER_SENDER`) and ActionMailer delivery method.
+- Set `config.hosts` from `APP_HOST` + `ADDITIONAL_HOSTS` for DNS rebinding protection; health endpoints exempted.
+- New `HealthController` with `/up` & `/health` (liveness) and `/health/deep` (Postgres + Redis readiness; optional Gemini auth probe via `HEALTH_CHECK_GEMINI=true`). Inherits from `ActionController::Base` to skip Devise/CSRF.
+
+**Code quality**
+
+- Re-enabled Metrics rubocop cops (AbcSize, MethodLength, ClassLength, CyclomaticComplexity, PerceivedComplexity, BlockLength, LineLength) at realistic thresholds. Added `rubocop-performance` and `rubocop-minitest` plugins.
+- Added `bullet` (`config/initializers/bullet.rb`) for N+1 detection in dev/test — currently warn-only.
+- Added `factory_bot_rails` and seed factories (`test/factories/{users,categories,documents}.rb`).
+- Cleaned up `.env.example`: removed misleading Supabase-only block, added grouped sections with concise per-var comments, added Sentry/SMTP/health knobs.
+
+**Frontend**
+
+- Unified admin login into the dark slate/teal theme (was a white card on indigo gradient — visual outlier). Reuses the `auth-card` / `hero-section auth-section` pattern from Devise sessions. Stripped legacy `.admin-login-*` styles from `_admin.scss`.
+- New `shared/_empty_state.html.erb` partial + `components/_empty_state.scss` design (sm/md/lg variants). Replaced bare `<p>No X yet</p>` empty states in admin dashboard, documents, users, and categories with iconography + body copy + contextual CTA.
+- Rewrote `shared/_flashes.html.erb` to iterate over the whole flash hash (notice/alert/success/error/info/warning) and added a `flash_controller.js` Stimulus controller that auto-dismisses after 4.5–8 s, pauses on hover, and respects `prefers-reduced-motion`.
+- Branded Devise mailer templates (`confirmation_instructions`, `reset_password_instructions`, `unlock_instructions`, `email_changed`, `password_change`) with a new table-based, inline-styled `layouts/mailer.html.erb` + plaintext siblings.
+- Added counter cache `document_chunks_count` (migration + `belongs_to :document, counter_cache: true`) and replaced `document.document_chunks.count` in the documents table view — kills an O(N+1) query per page render.
+
+**Outstanding (not in this changeset)**
+
+- Rails 7.2 / 8.0 upgrade (Brakeman EOLRails).
+- System tests for the streaming chat path; coverage push to ≥ 65%.
+- Pick a deploy target (Kamal / Fly.io / Render) and check in the config.
+- i18n externalization (`Rails/I18nLocaleTexts` currently disabled).
+- 2FA for admin (`devise-two-factor`).

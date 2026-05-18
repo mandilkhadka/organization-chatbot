@@ -1,5 +1,24 @@
-<p>Welcome <%= @email %>!</p>
+<% content_for :title, "Confirm your email" %>
 
-<p>You can confirm your account email through the link below:</p>
+<h1 style="margin:0 0 16px; font-size:22px; font-weight:600; color:#0f172a; letter-spacing:-0.01em;">
+  Confirm your email
+</h1>
 
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<p style="margin:0 0 16px; color:#334155; font-size:15px;">
+  Welcome, <%= @email %>.
+</p>
+
+<p style="margin:0 0 16px; color:#334155; font-size:15px;">
+  Please confirm your email address so we can finish setting up your Knowledge Assistant account.
+</p>
+
+<%= render "devise/mailer/button",
+           url: confirmation_url(@resource, confirmation_token: @token),
+           label: "Confirm email" %>
+
+<p style="margin:0 0 8px; color:#64748b; font-size:13px;">
+  Or copy and paste this link into your browser:
+</p>
+<p style="margin:0; color:#0d9488; font-size:13px; word-break:break-all;">
+  <%= confirmation_url(@resource, confirmation_token: @token) %>
+</p>

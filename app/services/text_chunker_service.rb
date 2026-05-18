@@ -26,7 +26,7 @@ class TextChunkerService
     end
 
     chunks << current_chunk.strip if current_chunk.present?
-    chunks.reject(&:blank?)
+    chunks.compact_blank
   end
 
   private

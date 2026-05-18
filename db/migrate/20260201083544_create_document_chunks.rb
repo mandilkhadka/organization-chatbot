@@ -16,7 +16,7 @@ class CreateDocumentChunks < ActiveRecord::Migration[7.1]
     else
       # Fallback: store embeddings as text (JSON array) for local development
       add_column :document_chunks, :embedding, :text
-      puts "NOTE: Using text column for embeddings (pgvector not available)"
+      Rails.logger.debug "NOTE: Using text column for embeddings (pgvector not available)"
     end
   end
 
@@ -25,7 +25,7 @@ class CreateDocumentChunks < ActiveRecord::Migration[7.1]
   def extension_enabled?(name)
     result = execute("SELECT 1 FROM pg_extension WHERE extname = '#{name}'")
     result.any?
-  rescue
+  rescue StandardError
     false
   end
 end

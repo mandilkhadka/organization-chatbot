@@ -1,0 +1,14 @@
+<%#
+  Email-safe button. Uses table-based layout (Outlook compatibility).
+  Pass `url:` and `label:` as locals.
+%>
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left" style="margin: 8px 0 24px;">
+  <tr>
+    <td style="background:#0d9488; border-radius:8px;">
+      <a href="<%= url %>"
+         style="display:inline-block; padding:12px 28px; font-size:15px; font-weight:600; color:#ffffff; text-decoration:none; border-radius:8px;">
+        <%= label %>
+      </a>
+    </td>
+  </tr>
+</table>

@@ -51,7 +51,7 @@ class AdminAuditLog < ApplicationRecord
         audit_resource_id: resource&.id
       }
     )
-    raise if Rails.env.development? || Rails.env.test?
+    raise if Rails.env.local?
 
     nil
   end

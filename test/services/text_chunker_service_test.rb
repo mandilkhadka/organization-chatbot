@@ -14,6 +14,7 @@ class TextChunkerServiceTest < ActiveSupport::TestCase
   test "returns single chunk for short text" do
     text = "This is a short sentence. Here is another one."
     chunks = @chunker.chunk(text)
+
     assert_equal 1, chunks.length
     assert_includes chunks.first, "short sentence"
   end
@@ -23,6 +24,7 @@ class TextChunkerServiceTest < ActiveSupport::TestCase
     text = sentence * 50
 
     chunks = @chunker.chunk(text)
+
     assert_operator chunks.length, :>, 1, "Expected multiple chunks for long input"
   end
 
@@ -39,12 +41,14 @@ class TextChunkerServiceTest < ActiveSupport::TestCase
     first_tail_words = chunks.first.split.last(5)
     second_head_text = chunks[1][0, 80]
     shared = first_tail_words.any? { |w| second_head_text.include?(w) }
+
     assert shared, "Expected some overlap from first chunk to appear at start of second"
   end
 
   test "rejects blank chunks from output" do
     text = "One sentence here. \n\n\n Another sentence."
     chunks = @chunker.chunk(text)
+
     assert chunks.none?(&:blank?), "No chunk should be blank"
   end
 
@@ -53,6 +57,7 @@ class TextChunkerServiceTest < ActiveSupport::TestCase
     chunks = @chunker.chunk(text)
     # All sentences should be present somewhere in the output
     joined = chunks.join(" ")
+
     assert_includes joined, "First sentence"
     assert_includes joined, "Second one"
     assert_includes joined, "Third question"

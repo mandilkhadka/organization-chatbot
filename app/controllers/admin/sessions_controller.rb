@@ -29,7 +29,7 @@ module Admin
 
       if is_locked
         flash.now[:alert] = "Account is locked. Please try again later."
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       elsif valid_password && is_admin
         sign_in(user)
         user.refresh_admin_session!
@@ -39,7 +39,7 @@ module Admin
         # Generic error message prevents user enumeration attacks
         # Don't reveal whether email exists, password was wrong, or user isn't admin
         flash.now[:alert] = "Invalid credentials"
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 

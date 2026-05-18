@@ -11,29 +11,34 @@ class AdminAuditLogTest < ActiveSupport::TestCase
       action: "login",
       resource_type: "System"
     )
-    assert log.valid?
+
+    assert_predicate log, :valid?
   end
 
   test "requires user" do
     log = AdminAuditLog.new(action: "login", resource_type: "System")
+
     assert_not log.valid?
     assert_includes log.errors[:user], "must exist"
   end
 
   test "requires action" do
     log = AdminAuditLog.new(user: @admin, resource_type: "System")
+
     assert_not log.valid?
     assert_includes log.errors[:action], "can't be blank"
   end
 
   test "requires resource_type" do
     log = AdminAuditLog.new(user: @admin, action: "login")
+
     assert_not log.valid?
     assert_includes log.errors[:resource_type], "can't be blank"
   end
 
   test "action must be valid" do
     log = AdminAuditLog.new(user: @admin, action: "invalid", resource_type: "System")
+
     assert_not log.valid?
     assert_includes log.errors[:action], "is not included in the list"
   end

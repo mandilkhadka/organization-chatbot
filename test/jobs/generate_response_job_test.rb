@@ -19,7 +19,7 @@ class GenerateResponseJobTest < ActiveJob::TestCase
 
   # Test job handles nil message gracefully
   test "should handle non-existent message gracefully" do
-    non_existent_id = 999999
+    non_existent_id = 999_999
 
     # Should not raise an error - returns early
     assert_nothing_raised do
@@ -37,6 +37,7 @@ class GenerateResponseJobTest < ActiveJob::TestCase
     GenerateResponseJob.perform_now(completed_message.id, @question)
 
     completed_message.reload
+
     assert_equal original_content, completed_message.content
     assert_equal original_status, completed_message.status
   end
@@ -51,6 +52,7 @@ class GenerateResponseJobTest < ActiveJob::TestCase
     GenerateResponseJob.perform_now(failed_message.id, @question)
 
     failed_message.reload
+
     assert_equal original_content, failed_message.content
     assert_equal original_status, failed_message.status
   end

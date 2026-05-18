@@ -30,12 +30,12 @@ module Admin
         redirect_to admin_documents_path, notice: "Document uploaded successfully. Processing will begin shortly."
       else
         @categories = Category.alphabetical
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
 
     def destroy
-      @document = Document.find_by!(id: params[:id])
+      @document = Document.find(params[:id])
       @document.destroy
       audit_resource(@document)
 
@@ -49,10 +49,10 @@ module Admin
       files = params[:files] || []
       category_id = params[:category_id].presence
 
-      return render json: { error: "No files provided" }, status: :unprocessable_entity if files.empty?
+      return render json: { error: "No files provided" }, status: :unprocessable_content if files.empty?
 
       if files.size > MAX_BULK_FILES
-        return render json: { error: "Maximum #{MAX_BULK_FILES} files allowed" }, status: :unprocessable_entity
+        return render json: { error: "Maximum #{MAX_BULK_FILES} files allowed" }, status: :unprocessable_content
       end
 
       results = { successful: [], failed: [] }

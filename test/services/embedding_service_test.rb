@@ -10,6 +10,7 @@ class EmbeddingServiceTest < ActiveSupport::TestCase
     fake_response = Struct.new(:vectors).new(@fake_vector)
     RubyLLM.stub :embed, fake_response do
       result = @service.generate("Some text to embed")
+
       assert_equal @fake_vector, result
     end
   end
@@ -26,6 +27,7 @@ class EmbeddingServiceTest < ActiveSupport::TestCase
     fake_response = Struct.new(:vectors).new(@fake_vector)
     RubyLLM.stub :embed, fake_response do
       results = @service.generate_batch(["a", "b", "c"])
+
       assert_equal 3, results.length
       results.each { |r| assert_equal @fake_vector, r }
     end

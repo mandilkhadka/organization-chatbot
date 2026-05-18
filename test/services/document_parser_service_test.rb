@@ -18,6 +18,7 @@ class DocumentParserServiceTest < ActiveSupport::TestCase
     fake_doc = OpenStruct.new(content_type: "text/plain", file: txt_blob)
 
     result = @parser.parse(fake_doc)
+
     assert_includes result, "Hello world"
     assert_equal Encoding::UTF_8, result.encoding
   end
@@ -28,12 +29,13 @@ class DocumentParserServiceTest < ActiveSupport::TestCase
     fake_doc = OpenStruct.new(content_type: "text/plain", file: txt_blob)
 
     result = @parser.parse(fake_doc)
+
     assert_operator result.bytesize, :<=, DocumentParserService::MAX_EXTRACTED_BYTES
   end
 
   test "wraps lower-level parse failures in ParseError" do
     raising_blob = Object.new.tap do |o|
-      def o.download; raise "underlying boom"; end
+      def o.download = raise("underlying boom")
     end
     fake_doc = OpenStruct.new(content_type: "text/plain", file: raising_blob)
 

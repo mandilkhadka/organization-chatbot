@@ -40,15 +40,12 @@
   <% if @documents.empty? %>
     <div class="card">
       <div class="card-body">
-        <div class="admin-empty-state">
-          <div class="empty-icon">
-            <i class="fas fa-folder-open"></i>
-          </div>
-          <p>No documents uploaded yet.</p>
-          <%= link_to new_admin_document_path, class: "btn btn-outline-primary" do %>
-            <i class="fas fa-upload me-2"></i>Upload your first document
-          <% end %>
-        </div>
+        <%= render "shared/empty_state",
+                   size: :lg,
+                   icon: "folder-open",
+                   title: params[:category_id].present? ? "No documents in this category" : "No documents uploaded yet",
+                   body: "Upload a PDF, DOCX, or TXT — the chatbot will index it within a minute. You can also drop in many at once with Bulk Upload.",
+                   cta: { label: "Upload your first document", path: new_admin_document_path, icon: "upload" } %>
       </div>
     </div>
   <% else %>

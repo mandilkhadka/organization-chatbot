@@ -1,0 +1,19 @@
+# Weighted queues — :default catches everything not explicitly routed.
+# embeddings is given more weight because it's the throughput bottleneck.
+:concurrency: <%= ENV.fetch("SIDEKIQ_CONCURRENCY", 5) %>
+:max_retries: 10
+:timeout: 25
+
+:queues:
+  - [embeddings, 4]
+  - [documents, 3]
+  - [responses, 3]
+  - [default, 2]
+  - [mailers, 1]
+
+# Dead set keeps failed jobs for 6 months so operators can replay or post-mortem.
+:dead_max_jobs: 10_000
+:dead_timeout_in_seconds: <%= 6 * 30 * 24 * 60 * 60 %>
+
+production:
+  :concurrency: <%= ENV.fetch("SIDEKIQ_CONCURRENCY", 10) %>

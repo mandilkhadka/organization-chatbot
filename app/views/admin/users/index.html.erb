@@ -30,15 +30,12 @@
   <% if @users.empty? %>
     <div class="card">
       <div class="card-body">
-        <div class="admin-empty-state">
-          <div class="empty-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <p>No users found.</p>
-          <%= link_to new_admin_user_path, class: "btn btn-outline-primary" do %>
-            <i class="fas fa-user-plus me-2"></i>Add your first employee
-          <% end %>
-        </div>
+        <%= render "shared/empty_state",
+                   size: :lg,
+                   icon: "users",
+                   title: (params[:search].present? || params[:role].present?) ? "No users match your filters" : "No users yet",
+                   body: (params[:search].present? || params[:role].present?) ? "Try clearing the filters above." : "Create accounts so your team can sign in and query the knowledge base.",
+                   cta: (params[:search].present? || params[:role].present?) ? nil : { label: "Add your first employee", path: new_admin_user_path, icon: "user-plus" } %>
       </div>
     </div>
   <% else %>

@@ -16,6 +16,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     post conversation_messages_path(@conversation), params: {
       message: { content: "Test message" }
     }
+
     assert_redirected_to new_user_session_path
   end
 
@@ -30,11 +31,13 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     end
 
     user_message = @conversation.messages.where(role: :user).last
+
     assert_equal "What is the vacation policy?", user_message.content
-    assert user_message.status_complete?
+    assert_predicate user_message, :status_complete?
 
     assistant_message = @conversation.messages.where(role: :assistant).last
-    assert assistant_message.status_pending?
+
+    assert_predicate assistant_message, :status_pending?
     assert_equal "", assistant_message.content
   end
 
@@ -56,6 +59,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     }, as: :turbo_stream
 
     user_message = @conversation.messages.where(role: :user).last
+
     assert_equal "Test message", user_message.content
   end
 
@@ -96,6 +100,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     }, as: :turbo_stream
 
     @empty_conversation.reload
+
     assert_equal "What is the employee handbook about?", @empty_conversation.title
   end
 
@@ -112,6 +117,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     }, as: :turbo_stream
 
     @empty_conversation.reload
+
     assert_operator @empty_conversation.title.length, :<=, 50
   end
 

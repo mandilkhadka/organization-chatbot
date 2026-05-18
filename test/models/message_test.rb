@@ -9,13 +9,15 @@ class MessageTest < ActiveSupport::TestCase
 
   test "should create user message" do
     message = messages(:user_message)
-    assert message.user?
+
+    assert_predicate message, :user?
     assert_not message.assistant?
   end
 
   test "should create assistant message" do
     message = messages(:assistant_message)
-    assert message.assistant?
+
+    assert_predicate message, :assistant?
     assert_not message.user?
   end
 
@@ -29,13 +31,15 @@ class MessageTest < ActiveSupport::TestCase
   test "should set positive feedback" do
     message = messages(:assistant_message)
     message.update(feedback: :positive)
-    assert message.feedback_positive?
+
+    assert_predicate message, :feedback_positive?
   end
 
   test "should set negative feedback" do
     message = messages(:assistant_message)
     message.update(feedback: :negative)
-    assert message.feedback_negative?
+
+    assert_predicate message, :feedback_negative?
   end
 
   # Test status enum
@@ -48,22 +52,26 @@ class MessageTest < ActiveSupport::TestCase
 
   test "should have pending status" do
     message = messages(:pending_assistant_message)
-    assert message.status_pending?
+
+    assert_predicate message, :status_pending?
   end
 
   test "should have streaming status" do
     message = messages(:streaming_assistant_message)
-    assert message.status_streaming?
+
+    assert_predicate message, :status_streaming?
   end
 
   test "should have complete status" do
     message = messages(:assistant_message)
-    assert message.status_complete?
+
+    assert_predicate message, :status_complete?
   end
 
   test "should have failed status" do
     message = messages(:failed_assistant_message)
-    assert message.status_failed?
+
+    assert_predicate message, :status_failed?
   end
 
   # Test validations
@@ -73,6 +81,7 @@ class MessageTest < ActiveSupport::TestCase
       content: "Test content",
       status: :complete
     )
+
     assert_not message.save
     assert_includes message.errors[:role], "can't be blank"
   end
@@ -84,6 +93,7 @@ class MessageTest < ActiveSupport::TestCase
       status: :pending,
       content: ""
     )
+
     assert message.save
   end
 
@@ -94,18 +104,21 @@ class MessageTest < ActiveSupport::TestCase
       status: :streaming,
       content: ""
     )
+
     assert message.save
   end
 
   # Test associations
   test "should belong to conversation" do
     message = messages(:user_message)
+
     assert_respond_to message, :conversation
     assert_instance_of Conversation, message.conversation
   end
 
   test "should have many message_sources" do
     message = messages(:assistant_message)
+
     assert_respond_to message, :message_sources
   end
 

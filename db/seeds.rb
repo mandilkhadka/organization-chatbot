@@ -2,15 +2,15 @@
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
-puts "Setting up seed data..."
+Rails.logger.debug "Setting up seed data..."
 
 # Create admin user
 admin_email = ENV.fetch("ADMIN_EMAIL", "admin@example.com")
 admin_password = ENV.fetch("ADMIN_PASSWORD") do
   if Rails.env.production?
-    SecureRandom.alphanumeric(16).tap do |pass|
-      puts "⚠️  No ADMIN_PASSWORD set. Generated secure password."
-      puts "   SAVE THIS PASSWORD - it won't be shown again!"
+    SecureRandom.alphanumeric(16).tap do |_pass|
+      Rails.logger.debug "⚠️  No ADMIN_PASSWORD set. Generated secure password."
+      Rails.logger.debug "   SAVE THIS PASSWORD - it won't be shown again!"
     end
   else
     "Admin123Dev456" # Meets 12+ char minimum
@@ -22,36 +22,34 @@ if admin.new_record?
   admin.password = admin_password
   admin.role = :admin
   admin.save!
-  puts "✓ Admin user created: #{admin.email}"
+  Rails.logger.debug { "✓ Admin user created: #{admin.email}" }
   if Rails.env.development?
-    puts "  Password: #{admin_password}"
+    Rails.logger.debug { "  Password: #{admin_password}" }
   else
-    puts "  Password: [hidden - set via ADMIN_PASSWORD env var]"
+    Rails.logger.debug "  Password: [hidden - set via ADMIN_PASSWORD env var]"
   end
-  puts "  (Change this password immediately in production!)"
-else
+  Rails.logger.debug "  (Change this password immediately in production!)"
+elsif admin.admin?
   # Ensure the existing user is an admin
-  unless admin.admin?
-    admin.update!(role: :admin)
-    puts "✓ Updated #{admin.email} to admin role"
-  else
-    puts "✓ Admin user already exists: #{admin.email}"
-  end
+  Rails.logger.debug { "✓ Admin user already exists: #{admin.email}" }
+else
+  admin.update!(role: :admin)
+  Rails.logger.debug { "✓ Updated #{admin.email} to admin role" }
 end
 
-puts ""
-puts "=" * 50
-puts "ADMIN CREDENTIALS"
-puts "=" * 50
-puts "Email:    #{admin_email}"
+Rails.logger.debug ""
+Rails.logger.debug "=" * 50
+Rails.logger.debug "ADMIN CREDENTIALS"
+Rails.logger.debug "=" * 50
+Rails.logger.debug { "Email:    #{admin_email}" }
 if Rails.env.development?
-  puts "Password: #{admin_password}"
+  Rails.logger.debug { "Password: #{admin_password}" }
 else
-  puts "Password: [hidden in production - check ADMIN_PASSWORD env var or logs during generation]"
+  Rails.logger.debug "Password: [hidden in production - check ADMIN_PASSWORD env var or logs during generation]"
 end
-puts ""
-puts "Admin login: /admin/login"
-puts "Employee login: /users/sign_in"
-puts "=" * 50
-puts ""
-puts "Seed data loaded successfully!"
+Rails.logger.debug ""
+Rails.logger.debug "Admin login: /admin/login"
+Rails.logger.debug "Employee login: /users/sign_in"
+Rails.logger.debug "=" * 50
+Rails.logger.debug ""
+Rails.logger.debug "Seed data loaded successfully!"

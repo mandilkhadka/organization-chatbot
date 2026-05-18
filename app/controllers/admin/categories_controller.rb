@@ -16,6 +16,9 @@ module Admin
       @category = Category.new
     end
 
+    def edit
+    end
+
     def create
       @category = Category.new(category_params)
 
@@ -23,11 +26,8 @@ module Admin
         audit_resource(@category)
         redirect_to admin_categories_path, notice: "Category created successfully"
       else
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
-    end
-
-    def edit
     end
 
     def update
@@ -35,7 +35,7 @@ module Admin
         audit_resource(@category)
         redirect_to admin_categories_path, notice: "Category updated successfully"
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

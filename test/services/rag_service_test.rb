@@ -26,14 +26,15 @@ class RagServiceTest < ActiveSupport::TestCase
     chat = Minitest::Mock.new
     chat.expect(:ask, fake_response) do |_prompt, system:, &block|
       assert_equal RagService::SYSTEM_PROMPT, system
-      block.call(Struct.new(:content).new("The vacation ")) if block
-      block.call(Struct.new(:content).new("policy is 15 days.")) if block
+      block&.call(Struct.new(:content).new("The vacation "))
+      block&.call(Struct.new(:content).new("policy is 15 days."))
       true
     end
 
     yielded = []
     RubyLLM.stub :chat, chat do
       result = @service.query("what is the policy?") { |c| yielded << c }
+
       assert_equal "The vacation policy is 15 days.", result[:response]
       assert_equal [@chunk], result[:sources]
       assert_equal ["The vacation ", "policy is 15 days."], yielded
@@ -52,13 +53,14 @@ class RagServiceTest < ActiveSupport::TestCase
 
     RubyLLM.stub :chat, raising_chat do
       result = @service.query("question")
+
       assert_match(/error/i, result[:response])
       assert_equal [], result[:sources]
     end
   end
 
   test "sanitizes input by truncating and removing control characters" do
-    long_question = "a" * (RagService::MAX_QUESTION_LENGTH + 500) + "\x00\x01\x07tail"
+    long_question = "#{'a' * (RagService::MAX_QUESTION_LENGTH + 500)}\u0000\u0001\atail"
     @vector_search.expect(:search, [@chunk], [long_question])
 
     fake_response = Struct.new(:content).new("ok")
@@ -74,8 +76,8 @@ class RagServiceTest < ActiveSupport::TestCase
       @service.query(long_question)
     end
 
-    refute_includes captured_prompt, "\x00"
-    refute_includes captured_prompt, "\x07"
+    assert_not_includes captured_prompt, "\x00"
+    assert_not_includes captured_prompt, "\x07"
     # Truncated content should still have the ellipsis marker.
     assert_includes captured_prompt, "..."
   end

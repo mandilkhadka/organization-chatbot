@@ -1,19 +1,33 @@
-<div class="flash-container">
-  <% if notice %>
-    <div class="flash-notification flash-notice" role="alert">
-      <i class="fas fa-check-circle flash-icon"></i>
-      <span class="flash-message"><%= notice %></span>
-      <button type="button" class="flash-close" data-bs-dismiss="alert" aria-label="Close">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-  <% end %>
-  <% if alert %>
-    <div class="flash-notification flash-alert" role="alert">
-      <i class="fas fa-exclamation-circle flash-icon"></i>
-      <span class="flash-message"><%= alert %></span>
-      <button type="button" class="flash-close" data-bs-dismiss="alert" aria-label="Close">
-        <i class="fas fa-times"></i>
+<%#
+  Toast-style flash stack. Iterates over the whole flash hash so any key
+  (success, error, info, warning, notice, alert) is rendered. Each toast
+  is wrapped by the `flash` Stimulus controller, which auto-dismisses
+  after a delay and supports manual close.
+%>
+<% flash_map = {
+  "notice"  => { class: "flash-notice",  icon: "circle-check" },
+  "success" => { class: "flash-notice",  icon: "circle-check" },
+  "alert"   => { class: "flash-alert",   icon: "circle-exclamation" },
+  "error"   => { class: "flash-alert",   icon: "circle-xmark" },
+  "warning" => { class: "flash-warning", icon: "triangle-exclamation" },
+  "info"    => { class: "flash-info",    icon: "circle-info" }
+} %>
+
+<div class="flash-container" aria-live="polite" aria-atomic="false">
+  <% flash.each do |key, message| %>
+    <% next if message.blank? %>
+    <% style = flash_map[key.to_s] || flash_map["info"] %>
+    <div class="flash-notification <%= style[:class] %>"
+         role="alert"
+         data-controller="flash"
+         data-flash-delay-value="<%= key.to_s.in?(%w[alert error]) ? 8000 : 4500 %>">
+      <i class="fas fa-<%= style[:icon] %> flash-icon" aria-hidden="true"></i>
+      <span class="flash-message"><%= message %></span>
+      <button type="button"
+              class="flash-close"
+              aria-label="Dismiss"
+              data-action="click->flash#close">
+        <i class="fas fa-times" aria-hidden="true"></i>
       </button>
     </div>
   <% end %>
