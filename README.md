@@ -10,6 +10,28 @@ Built on Ruby on Rails 7.1, Hotwire/Turbo, PostgreSQL with [pgvector](https://gi
 
 ---
 
+## Screenshots
+
+### Admin Dashboard
+
+At-a-glance counts (users, documents, conversations, messages), quick actions, and recent activity.
+
+![Admin Dashboard](docs/images/admin-dashboard.png)
+
+### Document Management
+
+Upload PDFs, DOCX, or TXT files (single or bulk), categorize them, and watch the chunking + embedding pipeline progress in real time.
+
+![Document Management](docs/images/document-management.png)
+
+### Chat with citations
+
+Employees ask in natural language; the assistant streams a grounded answer back with the source chunks it used.
+
+![Chat UI](docs/images/chat-ui.png)
+
+---
+
 ## Highlights
 
 - **RAG pipeline** — parse PDF/DOCX/TXT → 512-char chunks → Gemini embeddings → pgvector cosine similarity → Gemini Flash for generation.

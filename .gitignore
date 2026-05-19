@@ -4,50 +4,191 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# Ignore bundler config.
-/.bundle
+# =============================================================================
+# Secrets & credentials  — NEVER commit these
+# =============================================================================
 
-# Ignore all environment files (except templates).
+# Environment files (keep templates only)
 /.env*
 !/.env*.erb
 !/.env.example
 
-# Ignore all logfiles and tempfiles.
+# Rails master key + decrypted credentials
+/config/master.key
+/config/credentials/*.key
+
+# Generic private keys & certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*_rsa
+*_dsa
+*_ed25519
+*_ecdsa
+id_rsa
+id_dsa
+id_ed25519
+
+# Service-account JSONs (Google, Firebase, etc.)
+**/service-account*.json
+**/serviceaccount*.json
+**/gcloud-*.json
+.gcloud/
+
+# AWS / cloud creds
+.aws/credentials
+.aws/config
+.netrc
+
+# Local override files that often hold secrets
+/config/database.local.yml
+/config/secrets.local.yml
+
+# =============================================================================
+# Rails / Bundler
+# =============================================================================
+
+/.bundle
+/vendor/bundle
+.rbenv-vars
+
+# Logs
 /log/*
-/tmp/*
 !/log/.keep
+*.log
+log/*.log.*
+
+# Tempfiles
+/tmp/*
 !/tmp/.keep
 
-# Ignore pidfiles, but keep the directory.
+# PIDs
 /tmp/pids/*
 !/tmp/pids/
 !/tmp/pids/.keep
 
-# Ignore storage (uploaded files in development and any SQLite databases).
+# Active Storage uploads (dev/test) and SQLite databases
 /storage/*
 !/storage/.keep
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
+*.sqlite3
+*.sqlite3-*
 
+# Database dumps & backups
+*.dump
+*.sql.gz
+*.bak
+db/*.sqlite3
+db/data.yml
+
+# Asset pipeline
 /public/assets
+/public/packs
+/public/packs-test
 
-# Ignore master key for decrypting credentials and more.
-/config/master.key
+# Spring
+/spring.pid
+/.spring/
 
-# Ignore Mac and Linux file system files
-*.swp
+# Bootsnap
+/tmp/cache/bootsnap*
+
+# Capybara / system-test screenshots and downloads
+/tmp/capybara/
+/tmp/screenshots/
+
+# Coverage reports
+/coverage/
+
+# Profiling output
+/tmp/profile/
+
+# =============================================================================
+# Node / front-end build artifacts (importmap-based, but keep guards)
+# =============================================================================
+
+/node_modules
+yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+npm-debug.log*
+.pnpm-debug.log*
+
+# =============================================================================
+# Editor / IDE / OS
+# =============================================================================
+
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+Icon?
 
-# Ignore IDE and tool config files
+# Linux
+.directory
+.Trash-*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editor swap / backup files
+*.swp
+*.swo
+*.swn
+*~
+*.sublime-workspace
+*.sublime-project
+
+# JetBrains (RubyMine, IntelliJ)
+.idea/
+*.iml
+
+# VS Code (keep shared settings; ignore user state)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.history/
+
+# Vim / Emacs
+.netrwhist
+\#*\#
+.\#*
+
+# =============================================================================
+# AI / agent / tooling local state
+# =============================================================================
+
 .claude/
 .mcp.json
 .playwright-mcp/
+.cursor/
+.aider*
+.continue/
 
-# Ignore node modules
-/node_modules
+# =============================================================================
+# Debugger / REPL history
+# =============================================================================
 
-# Ignore byebug/debugger history
 .byebug_history
 .irb_history
-coverage/
+.pry_history
+.rspec_status
+
+# =============================================================================
+# Misc artifacts
+# =============================================================================
+
+*.tgz
+*.zip.tmp
+
+# Generated docs
+/doc/api
+/doc/app
