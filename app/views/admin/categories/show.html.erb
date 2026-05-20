@@ -1,0 +1,46 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1><%= @category.name %></h1>
+      <% if @category.description.present? %>
+        <p class="text-muted"><%= @category.description %></p>
+      <% end %>
+    </div>
+    <div>
+      <%= link_to "Edit", edit_admin_category_path(@category), class: "btn btn-outline-primary me-2" %>
+      <%= link_to "Back to Categories", admin_categories_path, class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Documents (<%= @documents.count %>)</h5>
+    </div>
+    <% if @documents.any? %>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Uploaded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @documents.each do |document| %>
+              <tr>
+                <td><%= document.title %></td>
+                <td><span class="badge bg-<%= document.ready? ? 'success' : 'warning' %>"><%= document.status %></span></td>
+                <td><%= document.created_at.strftime("%b %d, %Y") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="card-body text-muted">
+        No documents in this category yet.
+      </div>
+    <% end %>
+  </div>
+</div>

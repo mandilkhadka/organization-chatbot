@@ -1,0 +1,6 @@
+login_log:
+  user: admin_one
+  action: login
+  resource_type: System
+  ip_address: 127.0.0.1
+  created_at: <%= Time.current %>

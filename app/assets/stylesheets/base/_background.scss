@@ -1,0 +1,106 @@
+// Atmospheric background styles
+
+// Main gradient background
+.bg-gradient-mesh {
+  background:
+    radial-gradient(
+      ellipse at 20% 0%,
+      rgba($teal-600, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 100%,
+      rgba($violet-500, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 0% 50%,
+      rgba($cyan-400, 0.08) 0%,
+      transparent 40%
+    ),
+    linear-gradient(180deg, $slate-950 0%, $slate-900 50%, $slate-950 100%);
+  background-attachment: fixed;
+}
+
+// Alternative gradient - more subtle
+.bg-gradient-subtle {
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba($slate-700, 0.5) 0%,
+      transparent 60%
+    ),
+    linear-gradient(180deg, $slate-900 0%, $slate-950 100%);
+  background-attachment: fixed;
+}
+
+// Animated gradient orbs (CSS only)
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: gradientShift 15s ease-in-out infinite;
+  }
+
+  &::before {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(
+      circle,
+      rgba($teal-500, 0.3) 0%,
+      transparent 70%
+    );
+    top: -200px;
+    left: -100px;
+  }
+
+  &::after {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(
+      circle,
+      rgba($violet-500, 0.2) 0%,
+      transparent 70%
+    );
+    bottom: -150px;
+    right: -100px;
+    animation-delay: -7.5s;
+  }
+}
+
+// Grid pattern overlay
+.bg-grid {
+  background-image:
+    linear-gradient(rgba($slate-500, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba($slate-500, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+// Dot pattern
+.bg-dots {
+  background-image: radial-gradient(rgba($slate-500, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+// Noise texture overlay (subtle)
+.bg-noise {
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+}

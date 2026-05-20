@@ -1,0 +1,61 @@
+<div class="container py-4">
+  <div class="admin-header">
+    <h1>
+      <i class="fas fa-users"></i>
+      Employee Management
+    </h1>
+    <%= link_to new_admin_user_path, class: "btn btn-primary" do %>
+      <i class="fas fa-user-plus me-2"></i>Add Employee
+    <% end %>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="admin-filters mb-4">
+    <%= form_with url: admin_users_path, method: :get, local: true, class: "d-flex gap-3 flex-wrap" do %>
+      <div class="flex-grow-1 search-max-width">
+        <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Search by email..." %>
+      </div>
+      <div>
+        <%= select_tag :role, options_for_select([["All Roles", ""], ["Employee", "employee"], ["Admin", "admin"]], params[:role]), class: "form-select" %>
+      </div>
+      <div>
+        <%= submit_tag "Filter", class: "btn btn-secondary" %>
+      </div>
+      <% if params[:search].present? || params[:role].present? %>
+        <%= link_to "Clear", admin_users_path, class: "btn btn-outline-secondary" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if @users.empty? %>
+    <div class="card">
+      <div class="card-body">
+        <%= render "shared/empty_state",
+                   size: :lg,
+                   icon: "users",
+                   title: (params[:search].present? || params[:role].present?) ? "No users match your filters" : "No users yet",
+                   body: (params[:search].present? || params[:role].present?) ? "Try clearing the filters above." : "Create accounts so your team can sign in and query the knowledge base.",
+                   cta: (params[:search].present? || params[:role].present?) ? nil : { label: "Add your first employee", path: new_admin_user_path, icon: "user-plus" } %>
+      </div>
+    </div>
+  <% else %>
+    <div class="table-container">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Conversations</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="users">
+          <% @users.each do |user| %>
+            <%= render partial: "user", locals: { user: user } %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

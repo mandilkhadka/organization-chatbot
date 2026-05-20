@@ -1,0 +1,4 @@
+<%= render "chat_layout",
+    conversation: @conversation,
+    conversations: @conversations,
+    messages: @conversation&.messages&.ordered&.includes(message_sources: { document_chunk: :document }) || [] %>

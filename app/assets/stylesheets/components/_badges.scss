@@ -1,0 +1,138 @@
+// Modern badge styles
+
+.badge {
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+  border-radius: $border-radius;
+  letter-spacing: 0.01em;
+}
+
+// Primary badge
+.badge-primary,
+.bg-primary {
+  background: linear-gradient(135deg, $teal-500, $teal-600) !important;
+  color: white;
+}
+
+// Secondary badge
+.badge-secondary,
+.bg-secondary {
+  background: rgba($slate-600, 0.6) !important;
+  color: $slate-200;
+  border: 1px solid $border-subtle;
+}
+
+// Success badge
+.badge-success,
+.bg-success {
+  background: rgba($emerald-400, 0.15) !important;
+  color: $emerald-400;
+  border: 1px solid rgba($emerald-400, 0.3);
+}
+
+// Warning badge
+.badge-warning,
+.bg-warning {
+  background: rgba($amber-400, 0.15) !important;
+  color: $amber-400;
+  border: 1px solid rgba($amber-400, 0.3);
+}
+
+// Danger badge
+.badge-danger,
+.bg-danger {
+  background: rgba($rose-500, 0.15) !important;
+  color: $rose-500;
+  border: 1px solid rgba($rose-500, 0.3);
+}
+
+// Info badge
+.badge-info,
+.bg-info {
+  background: rgba($cyan-400, 0.15) !important;
+  color: $cyan-400;
+  border: 1px solid rgba($cyan-400, 0.3);
+}
+
+// Admin badge
+.badge-admin {
+  background: linear-gradient(135deg, $teal-500, $cyan-400);
+  color: $slate-900;
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+// Status badges
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375em 0.75em;
+
+  &::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+}
+
+.badge-status-pending {
+  @extend .badge-status;
+  background: rgba($amber-400, 0.1);
+  color: $amber-400;
+  border: 1px solid rgba($amber-400, 0.2);
+}
+
+.badge-status-processing {
+  @extend .badge-status;
+  background: rgba($cyan-400, 0.1);
+  color: $cyan-400;
+  border: 1px solid rgba($cyan-400, 0.2);
+
+  &::before {
+    animation: pulseGlow 1.5s ease-in-out infinite;
+  }
+}
+
+.badge-status-completed {
+  @extend .badge-status;
+  background: rgba($emerald-400, 0.1);
+  color: $emerald-400;
+  border: 1px solid rgba($emerald-400, 0.2);
+}
+
+.badge-status-failed {
+  @extend .badge-status;
+  background: rgba($rose-500, 0.1);
+  color: $rose-500;
+  border: 1px solid rgba($rose-500, 0.2);
+}
+
+// Source badge (for citations)
+.badge-source {
+  background: rgba($slate-700, 0.6);
+  color: $slate-300;
+  border: 1px solid $border-subtle;
+  font-size: 0.75rem;
+  padding: 0.25em 0.5em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba($slate-600, 0.6);
+    border-color: $border-highlight;
+    color: $slate-100;
+  }
+
+  i {
+    font-size: 0.65rem;
+    color: $teal-400;
+  }
+}

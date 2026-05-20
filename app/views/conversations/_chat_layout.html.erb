@@ -1,0 +1,49 @@
+<%= turbo_stream_from "conversation_#{conversation.id}" if conversation %>
+
+<div class="chat-container">
+  <!-- Sidebar -->
+  <aside class="chat-sidebar">
+    <div class="sidebar-header">
+      <%= button_to conversations_path, method: :post, class: "new-chat-btn" do %>
+        <i class="fas fa-plus"></i>
+        <span>New Chat</span>
+      <% end %>
+    </div>
+
+    <div id="conversations-list" class="conversations-list">
+      <% conversations.each do |conv| %>
+        <%= render "conversation_item", conversation: conv, active: conv == conversation %>
+      <% end %>
+    </div>
+  </aside>
+
+  <!-- Main Chat Area -->
+  <main class="chat-main">
+    <% if conversation %>
+      <!-- Messages -->
+      <div id="messages-container" class="messages-container" data-controller="scroll">
+        <div id="messages">
+          <% messages.each do |message| %>
+            <%= render "messages/message", message: message %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="chat-input-area">
+        <div class="chat-input-wrapper">
+          <%= render "messages/form", conversation: conversation %>
+        </div>
+      </div>
+    <% else %>
+      <!-- Empty State -->
+      <div class="chat-empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-comments"></i>
+        </div>
+        <h4>Start a new conversation</h4>
+        <p>Ask questions about company policies, procedures, and documentation.</p>
+      </div>
+    <% end %>
+  </main>
+</div>

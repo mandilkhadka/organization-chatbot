@@ -1,0 +1,6 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+source_one:
+  message: assistant_message
+  document_chunk: chunk_one
+  relevance_score: 0.95

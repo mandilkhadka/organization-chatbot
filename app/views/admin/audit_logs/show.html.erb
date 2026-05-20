@@ -1,0 +1,45 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Audit Log Details</h1>
+    <%= link_to "Back to Logs", admin_audit_logs_path, class: "btn btn-outline-secondary" %>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <dl class="row">
+        <dt class="col-sm-3">ID</dt>
+        <dd class="col-sm-9"><%= @audit_log.id %></dd>
+
+        <dt class="col-sm-3">Timestamp</dt>
+        <dd class="col-sm-9"><%= @audit_log.created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %></dd>
+
+        <dt class="col-sm-3">Admin User</dt>
+        <dd class="col-sm-9"><%= @audit_log.user&.email || "Unknown" %></dd>
+
+        <dt class="col-sm-3">Action</dt>
+        <dd class="col-sm-9">
+          <span class="badge bg-<%= action_badge_color(@audit_log.action) %>"><%= @audit_log.action %></span>
+        </dd>
+
+        <dt class="col-sm-3">Resource</dt>
+        <dd class="col-sm-9"><%= @audit_log.resource_type %> #<%= @audit_log.resource_id %></dd>
+
+        <dt class="col-sm-3">IP Address</dt>
+        <dd class="col-sm-9"><code><%= @audit_log.ip_address %></code></dd>
+
+        <dt class="col-sm-3">User Agent</dt>
+        <dd class="col-sm-9"><small><%= @audit_log.user_agent %></small></dd>
+
+        <dt class="col-sm-3">Request ID</dt>
+        <dd class="col-sm-9"><code><%= @audit_log.request_id %></code></dd>
+
+        <% if @audit_log.change_data.present? %>
+          <dt class="col-sm-3">Changes</dt>
+          <dd class="col-sm-9">
+            <pre class="bg-light p-3 rounded"><%= h(JSON.pretty_generate(@audit_log.change_data)) %></pre>
+          </dd>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+</div>

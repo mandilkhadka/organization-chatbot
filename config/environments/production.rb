@@ -1,7 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }
+  config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST", "localhost") }
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -53,30 +53,51 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new(STDOUT)
-    .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-    .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  config.logger = ActiveSupport::Logger.new($stdout)
+                                       .tap  { |logger| logger.formatter = Logger::Formatter.new }
+                                       .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # "info" includes generic and useful information about system operation, but avoids logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Redis-backed cache. Rack::Attack throttles, fragment caching, and
+  # Rails.cache.fetch all share this store. NullStore here would silently
+  # disable rate limiting in prod — never that.
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch("REDIS_URL", "redis://localhost:6379/0"),
+    namespace: "cache",
+    expires_in: 1.day,
+    connect_timeout: 1,
+    read_timeout: 1,
+    write_timeout: 1,
+    reconnect_attempts: 1,
+    error_handler: lambda { |method:, returning:, exception:|
+      _ = returning # unused; required by Rails.cache.error_handler signature
+      Rails.logger.error("[cache] #{method} failed (#{exception.class}): #{exception.message}")
+      Sentry.capture_exception(exception) if defined?(Sentry)
+    }
+  }
 
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter = :resque
-  # config.active_job.queue_name_prefix = "organization_chatbot_production"
+  config.active_job.queue_adapter = :sidekiq
 
   config.action_mailer.perform_caching = false
-
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch("SMTP_ADDRESS", "smtp.sendgrid.net"),
+    port: ENV.fetch("SMTP_PORT", "587").to_i,
+    user_name: ENV.fetch("SMTP_USERNAME", nil),
+    password: ENV.fetch("SMTP_PASSWORD", nil),
+    authentication: ENV.fetch("SMTP_AUTHENTICATION", "plain").to_sym,
+    enable_starttls_auto: true,
+    domain: ENV.fetch("SMTP_DOMAIN", ENV.fetch("APP_HOST", "localhost"))
+  }
+  config.action_mailer.default_options = { from: ENV.fetch("MAILER_SENDER", "no-reply@example.com") }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
@@ -88,11 +109,14 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # Defense against DNS rebinding and Host header attacks. APP_HOST is the
+  # canonical hostname; ADDITIONAL_HOSTS (comma-separated) allows secondary
+  # vanity domains and load balancer health probes.
+  primary_host = ENV.fetch("APP_HOST", nil)
+  additional_hosts = ENV.fetch("ADDITIONAL_HOSTS", "").split(",").map(&:strip).reject(&:empty?)
+  config.hosts = [primary_host, *additional_hosts].compact_blank if primary_host.present?
+  # Health checks are exempt — load balancers hit them by IP, not hostname.
+  config.host_authorization = {
+    exclude: ->(request) { request.path.in?(["/up", "/health", "/health/deep"]) }
+  }
 end

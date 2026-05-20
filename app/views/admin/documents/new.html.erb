@@ -1,0 +1,58 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="admin-header mb-4">
+        <h1>
+          <i class="fas fa-upload"></i>
+          Upload Document
+        </h1>
+      </div>
+
+      <div class="upload-form">
+        <%= form_with model: [:admin, @document], local: true, html: { multipart: true } do |f| %>
+          <% if @document.errors.any? %>
+            <div class="alert alert-danger mb-4">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              <div>
+                <strong>Please fix the following errors:</strong>
+                <ul class="mb-0 mt-2">
+                  <% @document.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="mb-4">
+            <%= f.label :title, class: "form-label" %>
+            <%= f.text_field :title, class: "form-control form-control-lg", placeholder: "Enter document title" %>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :category_id, "Category", class: "form-label" %>
+            <%= f.collection_select :category_id, @categories, :id, :name, { include_blank: "-- No Category --" }, { class: "form-control form-control-lg" } %>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :file, class: "form-label" %>
+            <%= f.file_field :file, class: "form-control form-control-lg", accept: ".pdf,.docx,.txt" %>
+            <div class="form-text mt-2">
+              <i class="fas fa-info-circle me-1"></i>
+              Supported formats: PDF, DOCX, TXT (max 10MB)
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 pt-2">
+            <%= link_to admin_documents_path, class: "btn btn-secondary" do %>
+              <i class="fas fa-arrow-left me-2"></i>Cancel
+            <% end %>
+            <%= f.button type: :submit, class: "btn btn-primary flex-grow-1" do %>
+              <i class="fas fa-cloud-upload-alt me-2"></i>Upload Document
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

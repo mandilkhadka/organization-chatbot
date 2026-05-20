@@ -1,1 +1,207 @@
-// Specific CSS for your home-page
+// Home page styles
+
+.hero-section {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  position: relative;
+
+  // Gradient background
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse at 30% 20%,
+        rgba($teal-500, 0.12) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 70% 80%,
+        rgba($violet-500, 0.08) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+  }
+}
+
+.hero-content {
+  max-width: 800px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba($slate-700, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-pill;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  color: $slate-300;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.5s ease-out forwards;
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: $emerald-400;
+    border-radius: 50%;
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+}
+
+.hero-title {
+  font-family: $headers-font;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: $slate-100;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.5s ease-out 0.1s forwards;
+  opacity: 0;
+
+  .text-gradient {
+    background: linear-gradient(135deg, $teal-400, $cyan-400);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  color: $slate-400;
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  animation: fadeInUp 0.5s ease-out 0.3s forwards;
+  opacity: 0;
+
+  .btn {
+    min-width: 140px;
+  }
+}
+
+// Features section
+.features-section {
+  padding: 4rem 0;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.section-title {
+  font-family: $headers-font;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $slate-100;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: $slate-400;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+// Brand icon
+.brand-icon-large {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, $teal-500, $cyan-400);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  font-size: 2.5rem;
+  color: $slate-900;
+  box-shadow: 0 8px 32px rgba($teal-400, 0.3);
+  animation: fadeInUp 0.5s ease-out forwards;
+
+  i {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+
+  // Small variant for auth forms
+  &.brand-icon-sm {
+    width: 60px;
+    height: 60px;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Auth page specific styles
+.auth-section {
+  min-height: calc(100vh - 60px);
+}
+
+.auth-content {
+  max-width: 420px;
+  width: 100%;
+}
+
+.auth-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-description {
+  margin-bottom: 2rem;
+  opacity: 1;
+}
+
+.auth-card {
+  text-align: left;
+}
+
+.auth-footer {
+  border-color: rgba($slate-400, 0.2) !important;
+}
+
+.auth-text {
+  color: $slate-400;
+  font-size: 0.875rem;
+}
+
+.auth-link {
+  color: $teal-400;
+
+  &:hover {
+    color: $teal-300;
+  }
+}
+
+// Search input max width utility
+.search-max-width {
+  max-width: 300px;
+}
+
+// Hidden utility for JS toggling
+.d-none-js {
+  display: none;
+}

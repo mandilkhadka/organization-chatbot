@@ -1,0 +1,12 @@
+<%= turbo_stream.append "messages" do %>
+  <%= render "messages/message", message: @user_message %>
+<% end %>
+
+<%= turbo_stream.append "messages" do %>
+  <%= render "messages/message", message: @assistant_message, is_streaming: true %>
+<% end %>
+
+<%# Clear the input field %>
+<%= turbo_stream.replace "chat-form" do %>
+  <%= render "messages/form", conversation: @conversation %>
+<% end %>

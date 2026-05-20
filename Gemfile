@@ -36,7 +36,7 @@ gem "jbuilder"
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
@@ -54,7 +54,7 @@ gem "sassc-rails"
 group :development, :test do
   gem "dotenv-rails"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ]
+  gem "debug", platforms: %i[mri windows]
 end
 
 group :development do
@@ -66,12 +66,31 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # Code quality and security
+  gem "rubocop", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-minitest", require: false
+  gem "brakeman", require: false
+
+  # Catch N+1 queries before they reach production
+  gem "bullet"
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Coverage reporting
+  gem "simplecov", require: false
+
+  # HTTP stubbing for service tests (Gemini API etc.)
+  gem "webmock"
+
+  # Object factories for non-trivial test scenarios
+  gem "factory_bot_rails"
 end
 
 gem 'ollama-ai', '~> 1.3.0'
@@ -82,3 +101,18 @@ gem "ruby_llm", "~> 1.6.4"
 
 gem "hotwire-livereload", "~> 2.1", group: :development
 
+# RAG Chatbot dependencies
+gem "pdf-reader"           # PDF parsing
+gem "docx"                 # DOCX parsing
+gem "neighbor"             # pgvector ActiveRecord integration
+gem "sidekiq"              # Background jobs
+gem "rack-attack"          # Rate limiting and throttling
+
+# Caching, queueing, and Action Cable shared backend
+gem "redis", ">= 4.0.1"
+
+# Observability
+gem "lograge"              # Single-line structured request logs
+gem "sentry-ruby"          # Error reporting
+gem "sentry-rails"         # Rails integration (request_id, breadcrumbs)
+gem "sentry-sidekiq"       # Job-level exception capture

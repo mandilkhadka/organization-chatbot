@@ -1,5 +1,10 @@
-// Import your components CSS files here.
+// Component imports
+@import "navbar";
+@import "buttons";
+@import "cards";
+@import "forms";
+@import "badges";
 @import "alert";
 @import "avatar";
 @import "form_legend_clear";
-@import "navbar";
+@import "empty_state";

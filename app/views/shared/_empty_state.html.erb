@@ -1,0 +1,36 @@
+<%#
+  Generic empty state. Use whenever a collection has zero rows.
+
+  Locals:
+    icon  – FontAwesome class fragment (without the `fa-` prefix), required
+    title – headline (short, sentence case)
+    body  – one-line explanation (optional)
+    cta   – hash { label:, path:, icon: } (optional)
+    size  – :sm | :md | :lg (defaults :md)
+
+  Example:
+    = render "shared/empty_state",
+        icon:  "folder-open",
+        title: "No documents yet",
+        body:  "Upload your first PDF, DOCX, or TXT to get started.",
+        cta:   { label: "Upload document", path: new_admin_document_path, icon: "upload" }
+%>
+<% size ||= :md %>
+<% cta ||= nil %>
+<% body ||= nil %>
+
+<div class="empty-state empty-state--<%= size %>">
+  <div class="empty-state__icon" aria-hidden="true">
+    <i class="fas fa-<%= icon %>"></i>
+  </div>
+  <h3 class="empty-state__title"><%= title %></h3>
+  <% if body %>
+    <p class="empty-state__body"><%= body %></p>
+  <% end %>
+  <% if cta %>
+    <%= link_to cta[:path], class: "btn btn-primary empty-state__cta" do %>
+      <% if cta[:icon] %><i class="fas fa-<%= cta[:icon] %> me-2"></i><% end %>
+      <%= cta[:label] %>
+    <% end %>
+  <% end %>
+</div>

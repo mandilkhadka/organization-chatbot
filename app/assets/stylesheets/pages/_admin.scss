@@ -1,0 +1,585 @@
+// Admin pages styles
+//
+// NOTE: The admin login page intentionally reuses the auth-section /
+// auth-card pattern defined alongside Devise. The previous light-themed
+// card-on-indigo-gradient was a visual outlier — having two design
+// systems in one app is a major "AI built" tell.
+
+// Small pill used above the admin auth heading.
+.auth-pill {
+  display: inline-block;
+  padding: 0.25rem 0.85rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba($teal-400, 0.35);
+  border-radius: 999px;
+  background: rgba($teal-500, 0.08);
+  color: $teal-300;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+// Focus visible styles for accessibility
+.btn,
+.btn-icon,
+.quick-action-btn,
+a {
+  &:focus-visible {
+    outline: 2px solid $teal-400;
+    outline-offset: 2px;
+  }
+}
+
+// Reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h1 {
+    font-family: $headers-font;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $slate-100;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+
+    i {
+      color: $teal-400;
+    }
+  }
+}
+
+// Admin filters
+.admin-filters {
+  background: rgba($slate-800, 0.3);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-lg;
+  padding: 1rem 1.25rem;
+}
+
+// Table styles
+.table-container {
+  background: rgba($slate-800, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-xl;
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+  color: $slate-200;
+
+  thead {
+    background: rgba($slate-700, 0.4);
+
+    th {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: $slate-400;
+      border-bottom: 1px solid $border-subtle;
+      padding: 1rem 1.25rem;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background 0.15s ease;
+
+      &:hover {
+        background: rgba($slate-700, 0.3);
+      }
+
+      &:not(:last-child) td {
+        border-bottom: 1px solid $border-subtle;
+      }
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      vertical-align: middle;
+      border: none;
+    }
+  }
+}
+
+// Document title in table
+.document-title {
+  font-weight: 500;
+  color: $slate-100;
+}
+
+.document-filename {
+  font-size: 0.8125rem;
+  color: $slate-500;
+  font-family: $mono-font;
+}
+
+.document-meta {
+  font-size: 0.8125rem;
+  color: $slate-400;
+}
+
+// Empty state for admin
+.admin-empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: $slate-400;
+
+  .empty-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba($slate-700, 0.4);
+    border: 1px solid $border-subtle;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem;
+    color: $slate-500;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// Upload form
+.upload-form {
+  background: rgba($slate-800, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-xl;
+  padding: 2rem;
+  max-width: 600px;
+
+  .form-label {
+    font-weight: 500;
+    color: $slate-200;
+  }
+
+  .file-upload-area {
+    border: 2px dashed $border-default;
+    border-radius: $border-radius-lg;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $teal-500;
+      background: rgba($teal-500, 0.05);
+    }
+
+    &.dragover {
+      border-color: $teal-400;
+      background: rgba($teal-400, 0.1);
+    }
+
+    .upload-icon {
+      font-size: 2.5rem;
+      color: $slate-500;
+      margin-bottom: 1rem;
+    }
+
+    .upload-text {
+      color: $slate-300;
+      font-size: 0.9375rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .upload-hint {
+      color: $slate-500;
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+// Action buttons in table
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Dashboard stat cards
+.stat-card {
+  background: rgba($slate-800, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-xl;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: rgba($teal-400, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+
+  .stat-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $slate-100;
+    line-height: 1;
+  }
+
+  .stat-title {
+    font-size: 0.875rem;
+    color: $slate-400;
+    margin-top: 0.25rem;
+  }
+
+  .stat-breakdown {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8125rem;
+    color: $slate-500;
+  }
+
+  &.stat-card-users .stat-icon {
+    background: rgba($teal-400, 0.15);
+    color: $teal-400;
+  }
+
+  &.stat-card-documents .stat-icon {
+    background: rgba($green-500, 0.15);
+    color: $green-500;
+  }
+
+  &.stat-card-conversations .stat-icon {
+    background: rgba($blue-500, 0.15);
+    color: $blue-500;
+  }
+
+  &.stat-card-messages .stat-icon {
+    background: rgba($amber-500, 0.15);
+    color: $amber-500;
+  }
+}
+
+// Quick actions
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.quick-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba($slate-700, 0.3);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-lg;
+  color: $slate-200;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba($slate-700, 0.5);
+    border-color: rgba($teal-400, 0.3);
+    color: $slate-100;
+    transform: translateY(-1px);
+  }
+
+  .action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    font-weight: 500;
+  }
+}
+
+// Recent list (for dashboard)
+.recent-list {
+  .recent-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid $border-subtle;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: rgba($slate-700, 0.2);
+    }
+  }
+
+  .recent-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba($slate-700, 0.4);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $slate-400;
+    font-size: 1rem;
+  }
+
+  .recent-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .recent-title {
+    font-weight: 500;
+    color: $slate-200;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .recent-meta {
+    font-size: 0.8125rem;
+    color: $slate-500;
+  }
+}
+
+// User management styles
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    background: rgba($slate-700, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $slate-400;
+    font-size: 1.25rem;
+  }
+}
+
+.user-email {
+  font-weight: 500;
+  color: $slate-100;
+}
+
+.badge-employee {
+  background: rgba($slate-500, 0.2);
+  color: $slate-300;
+  font-weight: 500;
+  padding: 0.35em 0.75em;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.badge-you {
+  background: rgba($teal-400, 0.2);
+  color: $teal-400;
+  font-weight: 500;
+  padding: 0.25em 0.5em;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+// User profile card (show page)
+.user-profile-card {
+  .user-avatar-large {
+    width: 80px;
+    height: 80px;
+    background: rgba($slate-700, 0.4);
+    border: 2px solid $border-subtle;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: $slate-400;
+    font-size: 2.5rem;
+  }
+
+  h4 {
+    color: $slate-100;
+    font-weight: 600;
+  }
+}
+
+.user-stats {
+  display: flex;
+  justify-content: space-around;
+
+  .stat {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $slate-100;
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
+    color: $slate-500;
+  }
+}
+
+// Info rows (show page)
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid $border-subtle;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .info-label {
+    color: $slate-500;
+    font-size: 0.875rem;
+  }
+
+  .info-value {
+    color: $slate-200;
+    font-size: 0.875rem;
+    text-align: right;
+  }
+}
+
+// Conversation list (show page)
+.conversation-list {
+  .conversation-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid $border-subtle;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .conversation-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .conversation-title {
+    font-weight: 500;
+    color: $slate-200;
+  }
+
+  .conversation-meta {
+    font-size: 0.8125rem;
+    color: $slate-500;
+  }
+}
+
+// Card styling for admin pages
+.card {
+  background: rgba($slate-800, 0.5);
+  border: 1px solid $border-subtle;
+  border-radius: $border-radius-xl;
+
+  .card-header {
+    background: rgba($slate-700, 0.3);
+    border-bottom: 1px solid $border-subtle;
+    padding: 1rem 1.25rem;
+
+    h5,
+    h6 {
+      color: $slate-200;
+      margin: 0;
+      display: flex;
+      align-items: center;
+
+      i {
+        color: $slate-400;
+      }
+    }
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .card-footer {
+    background: rgba($slate-700, 0.2);
+    border-top: 1px solid $border-subtle;
+    padding: 1rem 1.25rem;
+  }
+}
+
+// Credential info card
+.credential-info {
+  .card {
+    background: rgba($blue-500, 0.1);
+    border-color: rgba($blue-500, 0.3);
+  }
+
+  .card-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+}

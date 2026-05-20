@@ -1,0 +1,4 @@
+<%= render "chat_layout",
+    conversation: @conversation,
+    conversations: current_user.conversations.order(updated_at: :desc),
+    messages: @messages %>

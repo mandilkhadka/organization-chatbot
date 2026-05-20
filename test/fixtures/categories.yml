@@ -1,0 +1,7 @@
+general:
+  name: General
+  description: General documents
+
+policies:
+  name: Policies
+  description: Company policies

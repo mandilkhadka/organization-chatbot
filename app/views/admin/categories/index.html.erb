@@ -1,0 +1,49 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Document Categories</h1>
+    <%= link_to "New Category", new_admin_category_path, class: "btn btn-primary" %>
+  </div>
+
+  <% if @categories.any? %>
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Documents</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @categories.each do |category| %>
+              <tr>
+                <td><%= link_to category.name, admin_category_path(category) %></td>
+                <td><%= truncate(category.description, length: 50) %></td>
+                <td><span class="badge bg-secondary"><%= category.documents_count %></span></td>
+                <td><%= category.created_at.strftime("%b %d, %Y") %></td>
+                <td>
+                  <%= link_to "Edit", edit_admin_category_path(category), class: "btn btn-sm btn-outline-primary" %>
+                  <%= button_to "Delete", admin_category_path(category), method: :delete, class: "btn btn-sm btn-outline-danger", data: { turbo_confirm: "Are you sure?" } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="card">
+      <div class="card-body">
+        <%= render "shared/empty_state",
+                   size: :lg,
+                   icon: "tags",
+                   title: "No categories yet",
+                   body: "Group your documents by topic — Policies, Engineering, Onboarding — so search results stay scoped to the right area.",
+                   cta: { label: "Create your first category", path: new_admin_category_path, icon: "plus" } %>
+      </div>
+    </div>
+  <% end %>
+</div>

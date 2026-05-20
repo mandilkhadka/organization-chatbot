@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+document_one:
+  user: admin_one
+  title: "Company Handbook"
+  filename: "handbook.pdf"
+  content_type: "application/pdf"
+  file_size: 1024000
+  status: 2 # processed

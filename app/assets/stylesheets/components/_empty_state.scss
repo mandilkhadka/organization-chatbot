@@ -1,0 +1,86 @@
+// Generic empty state. Sized variants for use inside cards, tables, modals.
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: $text-secondary;
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1.25rem;
+    border-radius: 999px;
+    background: rgba($teal-400, 0.08);
+    border: 1px solid rgba($teal-400, 0.18);
+    color: $teal-300;
+    font-size: 1.5rem;
+  }
+
+  &__title {
+    margin: 0 0 0.5rem;
+    color: $text-primary;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  &__body {
+    max-width: 32rem;
+    margin: 0 0 1.25rem;
+    line-height: 1.6;
+    color: $text-secondary;
+    font-size: 0.95rem;
+  }
+
+  &__cta {
+    margin-top: 0.25rem;
+  }
+
+  // Compact variant for inline use in cards.
+  &--sm {
+    padding: 2rem 1rem;
+
+    .empty-state__icon {
+      width: 3rem;
+      height: 3rem;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state__title {
+      font-size: 1rem;
+    }
+
+    .empty-state__body {
+      font-size: 0.875rem;
+    }
+  }
+
+  // Hero variant for full-page index states.
+  &--lg {
+    padding: 5rem 2rem;
+
+    .empty-state__icon {
+      width: 5rem;
+      height: 5rem;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .empty-state__title {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .empty-state__body {
+      font-size: 1rem;
+    }
+  }
+}
